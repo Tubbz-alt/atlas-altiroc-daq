@@ -40,6 +40,8 @@ Top:
         DeadtimeDuration: 0x0
         BusyPulseWidth: 255 # Units of 6.4ns
         EnableReadout: 0x0 # Disable triggers
+        TrigWindowdbg: 0x0
+        BncDebug: 0x0
       ##########################################################################
       SlowControl:
         dac: 0x0

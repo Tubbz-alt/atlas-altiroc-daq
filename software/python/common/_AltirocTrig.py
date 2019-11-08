@@ -166,7 +166,25 @@ class AltirocTrig(pr.Device):
             bitSize      = 2, 
             bitOffset    = 8, 
             mode         = 'RW',
-        ))        
+        )) 
+
+        self.add(pr.RemoteVariable(
+            name         = 'TrigWindowdbg', 
+            description  = '0: trigger window is the normal 40 MHz strobe for gating (default mode), 1: trigger window is always on',
+            offset       = 0x44,
+            bitSize      = 1, 
+            bitOffset    = 16, 
+            mode         = 'RW',
+        ))    
+
+        self.add(pr.RemoteVariable(
+            name         = 'BncDebug', 
+            description  = '0: one-shot of the trigger\'s FSM busy signal (default mode), 1: copy of the 160 MHz clock',
+            offset       = 0x44,
+            bitSize      = 1, 
+            bitOffset    = 17, 
+            mode         = 'RW',
+        ))            
         
         self.add(pr.RemoteVariable(
             name         = 'EnCalPulseTrig', 
