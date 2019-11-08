@@ -21,6 +21,9 @@ use ieee.std_logic_arith.all;
 use work.StdRtlPkg.all;
 use work.AxiLitePkg.all;
 
+library UNISIM;
+use UNISIM.VCOMPONENTS.all;
+
 entity AtlasAltirocAsicTrigger is
    generic (
       TPD_G : time := 1 ns);
@@ -81,6 +84,8 @@ architecture rtl of AtlasAltirocAsicTrigger is
       trigMode            : sl;
       calStrobeAlign      : slv(1 downto 0);
       trigStrobeAlign     : slv(1 downto 0);
+      trigWindowdbg       : sl;
+      bncDebug            : sl;
       enSoftTrig          : sl;
       enBncTrig           : sl;
       enLocalTrig         : sl;
@@ -123,6 +128,8 @@ architecture rtl of AtlasAltirocAsicTrigger is
       trigMode            => '0',
       calStrobeAlign      => "11",
       trigStrobeAlign     => "11",
+      trigWindowdbg       => '0',
+      bncDebug            => '0',
       enSoftTrig          => '0',
       enBncTrig           => '0',
       enLocalTrig         => '0',
@@ -157,8 +164,13 @@ architecture rtl of AtlasAltirocAsicTrigger is
    signal remoteTrig : sl;
    signal orTrig     : sl;
    signal andTrig    : sl;
-   signal trigWindow : sl;
    signal busyPulse  : sl;
+
+   signal trigWindow    : sl;
+   signal trigWindowInt : sl;
+   signal busyPulseDdr  : sl;
+   signal D1            : sl;
+   signal D2            : sl;
 
    signal toaBusy    : sl;
    signal lemoIn     : sl;
@@ -192,7 +204,9 @@ begin
          clk     => clk160MHz,
          delay   => r.trigStrobeAlign,
          din(0)  => strb40MHz,
-         dout(0) => trigWindow);
+         dout(0) => trigWindowInt);
+
+   trigWindow <= trigWindowInt or r.trigWindowdbg;
 
    -----------------------
    -- PCIe input connector
@@ -258,12 +272,23 @@ begin
          trigIn     => r.busy,
          pulseOut   => busyPulse);
 
-   U_BNC_BUSY_OUTPUT : entity work.OutputBufferReg
-      generic map (
-         TPD_G => TPD_G)
+   -- r.bncDebug='0': one-shot, r.bncDebug='1': 160 MHz clock
+   D1 <= busyPulse when (r.bncDebug = '0') else '0';
+   D2 <= busyPulse when (r.bncDebug = '0') else '1';
+
+   U_ODDR : ODDR
       port map (
-         C => clk160MHz,
-         I => busyPulse,
+         C  => clk160MHz,
+         Q  => busyPulseDdr,
+         CE => '1',
+         D1 => D1,
+         D2 => D2,
+         R  => '0',
+         S  => '0');
+
+   U_OBUF : OBUF
+      port map (
+         I => busyPulseDdr,
          O => bncOut);
 
    --------------------------
@@ -362,6 +387,8 @@ begin
 
       axiSlaveRegister (axilEp, x"44", 0, v.calStrobeAlign);
       axiSlaveRegister (axilEp, x"44", 8, v.trigStrobeAlign);
+      axiSlaveRegister (axilEp, x"44", 16, v.trigWindowdbg);
+      axiSlaveRegister (axilEp, x"44", 17, v.bncDebug);
 
       axiSlaveRegister (axilEp, x"48", 0, v.enSoftTrig);
       axiSlaveRegister (axilEp, x"48", 1, v.enBncTrig);
@@ -598,6 +625,8 @@ begin
          v.trigMaster          := r.trigMaster;
          v.calStrobeAlign      := r.calStrobeAlign;
          v.trigStrobeAlign     := r.trigStrobeAlign;
+         v.trigWindowdbg       := r.trigWindowdbg;
+         v.bncDebug            := r.bncDebug;
          v.enSoftTrig          := r.enSoftTrig;
          v.enBncTrig           := r.enBncTrig;
          v.enLocalTrig         := r.enLocalTrig;
