@@ -18,8 +18,9 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
 
 library UNISIM;
 use UNISIM.VCOMPONENTS.all;
@@ -182,7 +183,7 @@ begin
    -- Phase alignment correction for 40 MHz strobe
    -----------------------------------------------
 
-   U_calStrb40MHz : entity work.SlvDelay
+   U_calStrb40MHz : entity surf.SlvDelay
       generic map (
          TPD_G        => TPD_G,
          DELAY_G      => 4,
@@ -194,7 +195,7 @@ begin
          din(0)  => strb40MHz,
          dout(0) => calStrb40MHz);
 
-   U_trigWindow : entity work.SlvDelay
+   U_trigWindow : entity surf.SlvDelay
       generic map (
          TPD_G        => TPD_G,
          DELAY_G      => 4,
@@ -211,7 +212,7 @@ begin
    -----------------------
    -- PCIe input connector
    -----------------------
-   U_toaBusy : entity work.Synchronizer
+   U_toaBusy : entity surf.Synchronizer
       generic map (
          TPD_G          => TPD_G,
          OUT_POLARITY_G => '0')         -- Invert the signal
@@ -224,7 +225,7 @@ begin
    ---------------------------
    -- LEMO TTL input connector
    ---------------------------
-   U_lemoIn : entity work.Synchronizer
+   U_lemoIn : entity surf.Synchronizer
       generic map (
          TPD_G          => TPD_G,
          OUT_POLARITY_G => '0')         -- Invert the signal
@@ -250,7 +251,7 @@ begin
    --    if trigger slave  then send copy of ASIC's TOA_BUSY_L signal
    ------------------------------------------------------------------
    lemoOutInt <= r.busy when(r.trigMaster = '1') else toaBusy;
-   U_lemoOut : entity work.OutputBufferReg
+   U_lemoOut : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -299,7 +300,7 @@ begin
    --------------------------
    -- BNC TTL input connector
    --------------------------
-   U_extTrig : entity work.RstSync
+   U_extTrig : entity surf.RstSync
       generic map (
          TPD_G           => TPD_G,
          IN_POLARITY_G   => '0',        -- Active LOW logic
@@ -310,7 +311,7 @@ begin
          clk      => clk160MHz,
          asyncRst => bncInL,            -- Active LOW
          syncRst  => bncIn);            -- Active HIGH
-   U_extTrigSync : entity work.SynchronizerEdge
+   U_extTrigSync : entity surf.SynchronizerEdge
       generic map (
          TPD_G          => TPD_G,
          RST_POLARITY_G => '0')         -- Active LOW

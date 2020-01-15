@@ -1,8 +1,6 @@
 -------------------------------------------------------------------------------
 -- File       : AtlasAltirocFpgaTb.vhd
 -- Company    : SLAC National Accelerator Laboratory
--- Created    : 2018-06-18
--- Last update: 2018-11-20
 -------------------------------------------------------------------------------
 -- Description: Simulation Testbed for testing the AtlasAltirocFpga module
 -------------------------------------------------------------------------------
@@ -20,11 +18,14 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
-use work.Pgp3Pkg.all;
-use work.BuildInfoPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
+use surf.Pgp3Pkg.all;
+
+library ruckus;
+use ruckus.BuildInfoPkg.all;
 
 entity AtlasAltirocFpgaTb is end AtlasAltirocFpgaTb;
 
@@ -46,7 +47,7 @@ architecture testbed of AtlasAltirocFpgaTb is
 
 begin
 
-   U_Clk160 : entity work.ClkRst
+   U_Clk160 : entity surf.ClkRst
       generic map (
          CLK_PERIOD_G      => 6.256 ns,  -- 159.8 MHz
          RST_START_DELAY_G => 0 ns,  -- Wait this long into simulation before asserting reset
@@ -55,7 +56,7 @@ begin
          clkP => clk160MHzP,
          clkN => clk160MHzN);
 
-   U_ClkPgp : entity work.ClkRst
+   U_ClkPgp : entity surf.ClkRst
       generic map (
          CLK_PERIOD_G      => 3.2 ns,   -- 312.5 MHz
          RST_START_DELAY_G => 0 ns,  -- Wait this long into simulation before asserting reset

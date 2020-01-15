@@ -18,8 +18,9 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
 
 entity AtlasAltirocAsicGpio is
    generic (
@@ -77,7 +78,7 @@ architecture mapping of AtlasAltirocAsicGpio is
 
 begin
 
-   U_strb40MHz : entity work.SynchronizerOneShot
+   U_strb40MHz : entity surf.SynchronizerOneShot
       generic map (
          TPD_G         => TPD_G,
          BYPASS_SYNC_G => true)

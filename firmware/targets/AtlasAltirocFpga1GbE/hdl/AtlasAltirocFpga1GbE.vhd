@@ -1,8 +1,6 @@
 -------------------------------------------------------------------------------
 -- File       : AtlasAltirocFpga1GbE.vhd
 -- Company    : SLAC National Accelerator Laboratory
--- Created    : 2018-09-06
--- Last update: 2019-06-04
 -------------------------------------------------------------------------------
 -- Description: Top-Level module using 1 GbE communication
 -------------------------------------------------------------------------------
@@ -18,7 +16,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-use work.StdRtlPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
 
 entity AtlasAltirocFpga1GbE is
    generic (
@@ -116,7 +115,7 @@ begin
          BUILD_INFO_G => BUILD_INFO_G,
          SIMULATION_G => SIMULATION_G,
          COM_TYPE_G   => "ETH",
-         IP_ADDR_G    => x"0B01A8C0")  -- 192.168.1.11 (before DHCP)            
+         IP_ADDR_G    => x"0A01A8C0")  -- 192.168.1.10 (before DHCP)            
       port map (
          -- ASIC Ports
          renable      => renable,

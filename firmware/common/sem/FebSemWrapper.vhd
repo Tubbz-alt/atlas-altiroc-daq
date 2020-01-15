@@ -18,15 +18,15 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.TextUtilPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
-use work.SsiPkg.all;
-use work.Pgp3Pkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.TextUtilPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
+use surf.SsiPkg.all;
+use surf.Pgp3Pkg.all;
 
---use work.FebConfigPkg.all;
-
+--use surf.FebConfigPkg.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -217,7 +217,7 @@ architecture rtl of FebSemWrapper is
 begin
 
    -- Synchronize Axi-Lite bus to semClk
-   AxiLiteAsync_1 : entity work.AxiLiteAsync
+   AxiLiteAsync_1 : entity surf.AxiLiteAsync
       generic map (
          TPD_G           => TPD_G,
          NUM_ADDR_BITS_G => 32)
@@ -265,7 +265,7 @@ begin
          RDWRB => icap_rdwrb
          );
 
-   Iprog7Core_1 : entity work.Iprog7SeriesCore
+   Iprog7Core_1 : entity surf.Iprog7SeriesCore
       generic map (
          TPD_G         => TPD_G,
          SYNC_RELOAD_G => true)
@@ -321,7 +321,7 @@ begin
    status_halted <= (status_initialization and status_observation and status_correction and
                      status_classification and status_injection);
 
-   -- SynchronizerFifo_Config : entity work.SynchronizerFifo
+   -- SynchronizerFifo_Config : entity surf.SynchronizerFifo
       -- generic map (
          -- TPD_G        => TPD_G,
          -- COMMON_CLK_G => false,
@@ -336,7 +336,7 @@ begin
          -- rd_clk => semClk,
          -- dout   => febAddrSync);
 
---    U_SyncStatusVector_1 : entity work.SyncStatusVector
+--    U_SyncStatusVector_1 : entity surf.SyncStatusVector
 --       generic map (
 --          TPD_G          => TPD_G,
 --          COMMON_CLK_G   => true,
@@ -585,15 +585,13 @@ begin
    -------------------------------------------------------------------------------------------------
    -- Convert streams to PGP format and clock
    -------------------------------------------------------------------------------------------------
-   AxiStreamFifo_TX : entity work.AxiStreamFifoV2
+   AxiStreamFifo_TX : entity surf.AxiStreamFifoV2
       generic map (
          TPD_G               => TPD_G,
          SLAVE_READY_EN_G    => false,
          VALID_THOLD_G       => 0,
-         BRAM_EN_G           => true,
-         USE_BUILT_IN_G      => false,
+         MEMORY_TYPE_G       => "distributed",
          GEN_SYNC_FIFO_G     => false,
-         CASCADE_SIZE_G      => 1,
          FIFO_ADDR_WIDTH_G   => 4,
          FIFO_FIXED_THRESH_G => true,
          FIFO_PAUSE_THRESH_G => 14,
@@ -609,15 +607,13 @@ begin
          mAxisMaster => semTxAxisMaster,
          mAxisSlave  => semTxAxisSlave);
 
-   AxiStreamFifo_RX : entity work.AxiStreamFifoV2
+   AxiStreamFifo_RX : entity surf.AxiStreamFifoV2
       generic map (
          TPD_G               => TPD_G,
          SLAVE_READY_EN_G    => true,
          VALID_THOLD_G       => 1,
-         BRAM_EN_G           => true,
-         USE_BUILT_IN_G      => false,
+         MEMORY_TYPE_G       => "distributed",
          GEN_SYNC_FIFO_G     => false,
-         CASCADE_SIZE_G      => 1,
          FIFO_ADDR_WIDTH_G   => 4,
          FIFO_FIXED_THRESH_G => true,
          FIFO_PAUSE_THRESH_G => 14,

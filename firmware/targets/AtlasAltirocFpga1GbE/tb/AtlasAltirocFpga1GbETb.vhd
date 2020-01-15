@@ -18,8 +18,11 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.BuildInfoPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+
+library ruckus;
+use ruckus.BuildInfoPkg.all;
 
 entity AtlasAltirocFpga1GbETb is end AtlasAltirocFpga1GbETb;
 
@@ -136,7 +139,7 @@ begin
       end if;
    end process seq;
 
-   U_clk312P : entity work.ClkRst
+   U_clk312P : entity surf.ClkRst
       generic map (
          CLK_PERIOD_G      => 3.2 ns,
          RST_START_DELAY_G => 0 ns,
@@ -145,7 +148,7 @@ begin
          clkP => clk312P,
          clkN => clk312N);
 
-   U_clk160P : entity work.ClkRst
+   U_clk160P : entity surf.ClkRst
       generic map (
          CLK_PERIOD_G      => 6.25 ns,
          RST_START_DELAY_G => 0 ns,
@@ -155,7 +158,7 @@ begin
          clkN => clk160N,
          rstL => pllLolL);
 
-   U_clk40P : entity work.ClkRst
+   U_clk40P : entity surf.ClkRst
       generic map (
          CLK_PERIOD_G      => 25.0 ns,
          RST_START_DELAY_G => 0 ns,

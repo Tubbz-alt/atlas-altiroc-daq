@@ -18,9 +18,10 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -151,7 +152,7 @@ begin
 
    rstbRamAnd <= rstbRamVec(1) and rstbRamVec(0);
 
-   U_rstbRam : entity work.OutputBufferReg
+   U_rstbRam : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -162,7 +163,7 @@ begin
    --------------------------
    -- AXI-Lite: Crossbar Core
    --------------------------  
-   U_XBAR : entity work.AxiLiteCrossbar
+   U_XBAR : entity surf.AxiLiteCrossbar
       generic map (
          TPD_G              => TPD_G,
          NUM_SLAVE_SLOTS_G  => 1,
@@ -223,7 +224,7 @@ begin
          axilWriteMaster => tdcClkWriteMaster,
          axilWriteSlave  => tdcClkWriteSlave);
 
-   U_TdcClkAsync : entity work.AxiLiteAsync
+   U_TdcClkAsync : entity surf.AxiLiteAsync
       generic map (
          TPD_G           => TPD_G,
          NUM_ADDR_BITS_G => 16)
@@ -263,7 +264,7 @@ begin
          axilWriteMaster => calWriteMaster,
          axilWriteSlave  => calWriteSlave);
 
-   U_CalAsync : entity work.AxiLiteAsync
+   U_CalAsync : entity surf.AxiLiteAsync
       generic map (
          TPD_G           => TPD_G,
          NUM_ADDR_BITS_G => 16)
@@ -316,7 +317,7 @@ begin
          axilWriteMaster => trigWriteMaster,
          axilWriteSlave  => trigWriteSlave);
 
-   U_TrigAsync : entity work.AxiLiteAsync
+   U_TrigAsync : entity surf.AxiLiteAsync
       generic map (
          TPD_G           => TPD_G,
          NUM_ADDR_BITS_G => 16)
@@ -389,7 +390,7 @@ begin
          axilWriteMaster => probeWriteMaster,
          axilWriteSlave  => probeWriteSlave);
 
-   U_ProbeAsync : entity work.AxiLiteAsync
+   U_ProbeAsync : entity surf.AxiLiteAsync
       generic map (
          TPD_G           => TPD_G,
          NUM_ADDR_BITS_G => 16)
@@ -448,7 +449,7 @@ begin
          axilWriteMaster => readoutWriteMaster,
          axilWriteSlave  => readoutWriteSlave);
 
-   U_ReadoutAsync : entity work.AxiLiteAsync
+   U_ReadoutAsync : entity surf.AxiLiteAsync
       generic map (
          TPD_G           => TPD_G,
          NUM_ADDR_BITS_G => 16)

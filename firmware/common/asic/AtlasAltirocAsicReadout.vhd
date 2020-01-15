@@ -18,11 +18,12 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
-use work.SsiPkg.all;
-use work.Pgp3Pkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
+use surf.SsiPkg.all;
+use surf.Pgp3Pkg.all;
 
 entity AtlasAltirocAsicReadout is
    generic (
@@ -190,7 +191,7 @@ architecture rtl of AtlasAltirocAsicReadout is
 
 begin
 
-   U_RegisteredInput : entity work.InputBufferReg
+   U_RegisteredInput : entity surf.InputBufferReg
       generic map (
          TPD_G       => TPD_G,
          DIFF_PAIR_G => true)
@@ -671,7 +672,7 @@ begin
       end if;
    end process seq;
 
-   U_renable : entity work.OutputBufferReg
+   U_renable : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -679,7 +680,7 @@ begin
          I => r.renable,
          O => renable);
 
-   U_rstbRead : entity work.OutputBufferReg
+   U_rstbRead : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -687,7 +688,7 @@ begin
          I => r.rstbRead,
          O => rstbRead);
 
-   U_rdClk : entity work.OutputBufferReg
+   U_rdClk : entity surf.OutputBufferReg
       generic map (
          TPD_G       => TPD_G,
          DIFF_PAIR_G => true)
@@ -697,7 +698,7 @@ begin
          O  => rdClkP,
          OB => rdClkN);
 
-   FIFO_TX : entity work.AxiStreamFifoV2
+   FIFO_TX : entity surf.AxiStreamFifoV2
       generic map (
          -- General Configurations
          TPD_G               => TPD_G,
@@ -705,7 +706,6 @@ begin
          VALID_THOLD_G       => 256,
          VALID_BURST_MODE_G  => true,
          -- FIFO configurations
-         BRAM_EN_G           => true,
          GEN_SYNC_FIFO_G     => false,
          FIFO_ADDR_WIDTH_G   => 9,
          -- AXI Stream Port Configurations
