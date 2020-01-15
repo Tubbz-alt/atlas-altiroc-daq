@@ -25,9 +25,8 @@ use surf.AxiLitePkg.all;
 entity AtlasAltirocAsicShiftReg is
    generic (
       TPD_G            : time     := 1 ns;
-      SHIFT_REG_SIZE_G : positive := 16;
-      CLK_PERIOD_G     : real     := 6.4E-9;   -- 156.25 MHz = 1/6.4E-9
-      SCLK_PERIOD_G    : real     := 1.0E-6);  -- 1MHz = 1/1.0E-6    
+      SIMULATION_G     : boolean  := false;
+      SHIFT_REG_SIZE_G : positive := 16);
    port (
       -- ASIC Ports
       srin            : out sl;
@@ -35,6 +34,7 @@ entity AtlasAltirocAsicShiftReg is
       ck              : out sl;
       srout           : in  sl;
       -- External Interface
+      sclkPeriod      : in  slv(15 downto 0);  -- Units of axilClk clock cycles
       extLock         : in  sl                               := '0';
       extValid        : in  sl                               := '0';
       extIbData       : in  slv(SHIFT_REG_SIZE_G-1 downto 0) := (others => '0');
@@ -51,8 +51,6 @@ end AtlasAltirocAsicShiftReg;
 
 architecture mapping of AtlasAltirocAsicShiftReg is
 
-   constant SCLK_HALF_PERIOD_C : positive := integer(SCLK_PERIOD_G / (2.0*CLK_PERIOD_G));
-
    constant WRD_SIZE_C : natural := (SHIFT_REG_SIZE_G/32)+4;
 
    type StateType is (
@@ -68,7 +66,7 @@ architecture mapping of AtlasAltirocAsicShiftReg is
       data           : slv((32*WRD_SIZE_C) downto 0);
       shiftReg       : slv(SHIFT_REG_SIZE_G-1 downto 0);
       readback       : slv(SHIFT_REG_SIZE_G-1 downto 0);
-      clkCnt         : natural range 0 to SCLK_HALF_PERIOD_C;
+      clkCnt         : slv(15 downto 0);
       cnt            : natural range 0 to SHIFT_REG_SIZE_G-1;
       axilReadSlave  : AxiLiteReadSlaveType;
       axilWriteSlave : AxiLiteWriteSlaveType;
@@ -82,7 +80,7 @@ architecture mapping of AtlasAltirocAsicShiftReg is
       data           => (others => '0'),
       shiftReg       => (others => '0'),
       readback       => (others => '0'),
-      clkCnt         => 0,
+      clkCnt         => (others => '0'),
       cnt            => 0,
       axilReadSlave  => AXI_LITE_READ_SLAVE_INIT_C,
       axilWriteSlave => AXI_LITE_WRITE_SLAVE_INIT_C,
@@ -105,7 +103,7 @@ begin
          Q1 => shiftIn);
 
    comb : process (axilReadMaster, axilRst, axilWriteMaster, extIbData,
-                   extLock, extValid, r, shiftIn) is
+                   extLock, extValid, r, sclkPeriod, shiftIn) is
       variable v          : RegType;
       variable axilStatus : AxiLiteStatusType;
       variable wrIdx      : natural;
@@ -169,9 +167,9 @@ begin
          ----------------------------------------------------------------------      
          when SAMPLE_S =>
             -- Wait half a clock period
-            if (r.clkCnt = SCLK_HALF_PERIOD_C) then
+            if (r.clkCnt = sclkPeriod) or SIMULATION_G then
                -- Reset the counter
-               v.clkCnt   := 0;
+               v.clkCnt   := (others => '0');
                -- Set clock high
                v.sclk     := '1';
                -- Shift the output data
@@ -185,9 +183,9 @@ begin
          ----------------------------------------------------------------------      
          when SHIFT_S =>
             -- Wait half a clock period
-            if (r.clkCnt = SCLK_HALF_PERIOD_C) then
+            if (r.clkCnt = sclkPeriod) or SIMULATION_G then
                -- Reset the counter
-               v.clkCnt   := 0;
+               v.clkCnt   := (others => '0');
                -- Set clock low
                v.sclk     := '0';
                -- Shift the output data
@@ -211,9 +209,9 @@ begin
          ----------------------------------------------------------------------      
          when DONE_S =>
             -- Wait half a clock period
-            if (r.clkCnt = SCLK_HALF_PERIOD_C) then
+            if (r.clkCnt = sclkPeriod) or SIMULATION_G then
                -- Reset the counter
-               v.clkCnt := 0;
+               v.clkCnt := (others => '0');
                ----------------------------------------------------------------      
                -- Appears to be a bug in the ASIC with feedback of the shift 
                -- register output to update the firmware's local v.data cache.  

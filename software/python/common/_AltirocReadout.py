@@ -292,8 +292,25 @@ class AltirocReadout(pr.Device):
             offset       = 0x50,
             bitSize      = 25,
             mode         = 'RW',
-        ))          
-        
+        )) 
+
+        self.add(pr.RemoteVariable(
+            name         = 'ProbeSclkConfig',
+            description  = 'Sets the probe SCLK half period (zero inclusive)',
+            offset       = 0x60,
+            bitSize      = 16,
+            disp         = '{:d}',
+            mode         = 'RW',
+        ))
+
+        self.add(pr.LinkVariable(
+            name         = 'ProbeSclkHz', 
+            units        = 'MHz',
+            disp         = '{:1.3f}',
+            dependencies = [self.ProbeSclkConfig],
+            linkedGet    = lambda: 160.0/(2*(self.ProbeSclkConfig.value()+1)),
+        ))
+
         for i in range(5):
             for j in range(5):
                 pixel = 5*i+j
