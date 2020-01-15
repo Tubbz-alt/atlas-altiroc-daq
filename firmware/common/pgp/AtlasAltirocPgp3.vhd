@@ -16,11 +16,12 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
-use work.SsiPkg.all;
-use work.Pgp3Pkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
+use surf.SsiPkg.all;
+use surf.Pgp3Pkg.all;
 
 entity AtlasAltirocPgp3 is
    generic (
@@ -93,7 +94,7 @@ begin
    rxLinkUp <= pgpRxOut.linkReady;
    txLinkUp <= pgpTxOut.linkReady;
 
-   U_PwrUpRst : entity work.PwrUpRst
+   U_PwrUpRst : entity surf.PwrUpRst
       generic map(
          TPD_G         => TPD_G,
          SIM_SPEEDUP_G => SIMULATION_G)
@@ -101,7 +102,7 @@ begin
          clk    => pgpRefClkDiv2,
          rstOut => pgpRefClkDiv2Rst);
 
-   U_MMCM : entity work.ClockManager7
+   U_MMCM : entity surf.ClockManager7
       generic map(
          TPD_G              => TPD_G,
          SIMULATION_G       => SIMULATION_G,
@@ -125,7 +126,7 @@ begin
          rstOut(0) => refRst100MHz,
          rstOut(1) => sysRst);
 
-   U_PGPv3 : entity work.Pgp3Gtx7Wrapper
+   U_PGPv3 : entity surf.Pgp3Gtx7Wrapper
       generic map(
          TPD_G          => TPD_G,
          ROGUE_SIM_EN_G => SIMULATION_G,
@@ -173,7 +174,7 @@ begin
          axilWriteMaster   => AXI_LITE_WRITE_MASTER_INIT_C,
          axilWriteSlave    => open);
 
-   U_Vc0 : entity work.SrpV3AxiLite
+   U_Vc0 : entity surf.SrpV3AxiLite
       generic map (
          TPD_G               => TPD_G,
          SLAVE_READY_EN_G    => SIMULATION_G,

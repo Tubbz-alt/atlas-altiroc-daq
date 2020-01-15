@@ -18,8 +18,9 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
 
 entity AtlasAltirocAsicCalPulse is
    generic (
@@ -208,7 +209,7 @@ begin
          pulseIn    => r.pulse,
          pulseOut   => pulseOneShot);
 
-   U_cmdPulse : entity work.OutputBufferReg
+   U_cmdPulse : entity surf.OutputBufferReg
       generic map (
          TPD_G       => TPD_G,
          DIFF_PAIR_G => true)

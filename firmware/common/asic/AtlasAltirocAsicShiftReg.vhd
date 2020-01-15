@@ -1,8 +1,6 @@
 -------------------------------------------------------------------------------
 -- File       : AtlasAltirocAsicShiftReg.vhd
 -- Company    : SLAC National Accelerator Laboratory
--- Created    : 2018-09-07
--- Last update: 2019-06-10
 -------------------------------------------------------------------------------
 -- Description: ALTIROC readout core module
 -------------------------------------------------------------------------------
@@ -20,8 +18,9 @@ use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
 
 entity AtlasAltirocAsicShiftReg is
    generic (
@@ -97,7 +96,7 @@ architecture mapping of AtlasAltirocAsicShiftReg is
 
 begin
 
-   U_srout : entity work.InputBufferReg
+   U_srout : entity surf.InputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -263,7 +262,7 @@ begin
       end if;
    end process seq;
 
-   U_srin : entity work.OutputBufferReg
+   U_srin : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -271,7 +270,7 @@ begin
          I => r.shiftReg(SHIFT_REG_SIZE_G-1),
          O => srin);
 
-   U_rstb : entity work.OutputBufferReg
+   U_rstb : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -279,7 +278,7 @@ begin
          I => rstL,
          O => rstb);
 
-   U_ck : entity work.OutputBufferReg
+   U_ck : entity surf.OutputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (

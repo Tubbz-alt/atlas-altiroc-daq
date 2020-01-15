@@ -15,13 +15,14 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use IEEE.std_logic_unsigned.all;
-use IEEE.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
-use work.I2cPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
+use surf.I2cPkg.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -167,7 +168,7 @@ begin
    --------------------------
    -- AXI-Lite: Crossbar Core
    --------------------------  
-   U_XBAR : entity work.AxiLiteCrossbar
+   U_XBAR : entity surf.AxiLiteCrossbar
       generic map (
          TPD_G              => TPD_G,
          NUM_SLAVE_SLOTS_G  => 1,
@@ -188,7 +189,7 @@ begin
    ---------------------------
    -- AXI-Lite: Version Module
    ---------------------------          
-   U_AxiVersion : entity work.AxiVersion
+   U_AxiVersion : entity surf.AxiVersion
       generic map (
          TPD_G              => TPD_G,
          BUILD_INFO_G       => BUILD_INFO_G,
@@ -244,7 +245,7 @@ begin
       -----------------------
       -- AXI-Lite XADC Module
       -----------------------
-      U_Xadc : entity work.AxiXadcMinimumCore
+      U_Xadc : entity surf.AxiXadcMinimumCore
          port map (
             -- XADC Ports
             vPIn           => vPIn,
@@ -261,7 +262,7 @@ begin
       ------------------------------
       -- AXI-Lite: Boot Flash Module
       ------------------------------
-      U_BootProm : entity work.AxiMicronN25QCore
+      U_BootProm : entity surf.AxiMicronN25QCore
          generic map (
             TPD_G           => TPD_G,
             MEM_ADDR_MASK_G => x"00000000",  -- Using hardware write protection
@@ -304,7 +305,7 @@ begin
       ----------------------
       -- AXI-Lite: Power I2C
       ----------------------
-      U_PwrI2C : entity work.AxiI2cRegMaster
+      U_PwrI2C : entity surf.AxiI2cRegMaster
          generic map (
             TPD_G          => TPD_G,
             DEVICE_MAP_G   => PWR_I2C_C,
@@ -326,7 +327,7 @@ begin
       ----------------------------
       -- AXI-Lite: DLY Monitor I2C
       ----------------------------
-      U_DlyTempI2C : entity work.AxiI2cRegMaster
+      U_DlyTempI2C : entity surf.AxiI2cRegMaster
          generic map (
             TPD_G          => TPD_G,
             DEVICE_MAP_G   => DLY_I2C_C,
@@ -348,7 +349,7 @@ begin
       --------------------
       -- AXI-Lite: DAC SPI
       --------------------            
-      U_DAC : entity work.AxiSpiMaster
+      U_DAC : entity surf.AxiSpiMaster
          generic map (
             TPD_G             => TPD_G,
             CPOL_G            => '1',     -- SDIN sampled on falling edge
@@ -374,7 +375,7 @@ begin
       --------------------
       -- AXI-Lite: PLL SPI
       --------------------
-      U_PLL : entity work.Si5345
+      U_PLL : entity surf.Si5345
          generic map (
             TPD_G             => TPD_G,
             CLK_PERIOD_G      => (1/AXI_CLK_FREQ_G),

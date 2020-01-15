@@ -2,7 +2,7 @@
 -- File       : AtlasAltirocEth.vhd
 -- Company    : SLAC National Accelerator Laboratory
 -------------------------------------------------------------------------------
--- Description: Wrapper for PGPv3 communication
+-- Description: Wrapper for Ethernet communication
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
 -- It is subject to the license terms in the LICENSE.txt file found in the 
@@ -16,12 +16,13 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-use work.StdRtlPkg.all;
-use work.AxiLitePkg.all;
-use work.AxiStreamPkg.all;
-use work.SsiPkg.all;
-use work.Pgp3Pkg.all;
-use work.EthMacPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
+use surf.AxiLitePkg.all;
+use surf.AxiStreamPkg.all;
+use surf.SsiPkg.all;
+use surf.Pgp3Pkg.all;
+use surf.EthMacPkg.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -104,7 +105,7 @@ begin
    axilClk <= sysClk;
    axilRst <= sysRst;
 
-   U_txLinkUp : entity work.PwrUpRst
+   U_txLinkUp : entity surf.PwrUpRst
       generic map (
          TPD_G          => TPD_G,
          IN_POLARITY_G  => '0',
@@ -116,7 +117,7 @@ begin
          rstOut => txLinkUp);
    rxLinkUp <= rssiConnected;
 
-   U_MMCM : entity work.ClockManager7
+   U_MMCM : entity surf.ClockManager7
       generic map(
          TPD_G              => TPD_G,
          SIMULATION_G       => SIMULATION_G,
@@ -141,7 +142,7 @@ begin
          rstOut(1) => sysRst);
 
    GEN_1G : if (ETH_10G_G = false) generate
-      U_Eth : entity work.GigEthGtx7Wrapper
+      U_Eth : entity surf.GigEthGtx7Wrapper
          generic map (
             TPD_G              => TPD_G,
             -- DMA/MAC Configurations
@@ -180,7 +181,7 @@ begin
    end generate;
 
    GEN_10G : if (ETH_10G_G = true) generate
-      U_Eth : entity work.TenGigEthGtx7Wrapper
+      U_Eth : entity surf.TenGigEthGtx7Wrapper
          generic map (
             TPD_G         => TPD_G,
             REFCLK_DIV2_G => true,      -- TRUE: gtClkP/N = 312.5 MHz
@@ -213,7 +214,7 @@ begin
    ----------------------
    -- IPv4/ARP/UDP Engine
    ----------------------
-   U_UDP : entity work.UdpEngineWrapper
+   U_UDP : entity surf.UdpEngineWrapper
       generic map (
          -- Simulation Generics
          TPD_G          => TPD_G,
@@ -248,7 +249,7 @@ begin
    ------------------------------------------
    -- Software's RSSI Server Interface @ 8192
    ------------------------------------------
-   U_RssiServer : entity work.RssiCoreWrapper
+   U_RssiServer : entity surf.RssiCoreWrapper
       generic map (
          TPD_G               => TPD_G,
          SERVER_G            => true,
@@ -281,7 +282,7 @@ begin
          mTspAxisMaster_o  => ibServerMasters(0),
          mTspAxisSlave_i   => ibServerSlaves(0));
 
-   U_Vc0 : entity work.SrpV3AxiLite
+   U_Vc0 : entity surf.SrpV3AxiLite
       generic map (
          TPD_G               => TPD_G,
          SLAVE_READY_EN_G    => true,

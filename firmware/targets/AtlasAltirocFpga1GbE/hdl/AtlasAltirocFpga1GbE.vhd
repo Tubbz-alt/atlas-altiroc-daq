@@ -1,8 +1,6 @@
 -------------------------------------------------------------------------------
 -- File       : AtlasAltirocFpga1GbE.vhd
 -- Company    : SLAC National Accelerator Laboratory
--- Created    : 2018-09-06
--- Last update: 2019-06-04
 -------------------------------------------------------------------------------
 -- Description: Top-Level module using 1 GbE communication
 -------------------------------------------------------------------------------
@@ -18,7 +16,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-use work.StdRtlPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
 
 entity AtlasAltirocFpga1GbE is
    generic (

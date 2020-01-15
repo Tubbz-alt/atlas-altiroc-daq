@@ -16,7 +16,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-use work.StdRtlPkg.all;
+library surf;
+use surf.StdRtlPkg.all;
 
 library unisim;
 use unisim.vcomponents.all;
@@ -94,7 +95,7 @@ begin
          I => localRefClock,
          O => localRefClk);
 
-   U_ClkOutBufDiff : entity work.ClkOutBufDiff
+   U_ClkOutBufDiff : entity surf.ClkOutBufDiff
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -121,7 +122,7 @@ begin
          I => pllClkIn(0),
          O => clock160MHz);
 
-   U_rst160MHz : entity work.RstSync
+   U_rst160MHz : entity surf.RstSync
       generic map(
          TPD_G          => TPD_G,
          IN_POLARITY_G  => '0',
@@ -134,7 +135,7 @@ begin
    clk160MHz <= clock160MHz;
    rst160MHz <= reset160MHz;
 
-   U_strobe40MHz : entity work.InputBufferReg
+   U_strobe40MHz : entity surf.InputBufferReg
       generic map (
          TPD_G => TPD_G)
       port map (
@@ -142,7 +143,7 @@ begin
          I  => pllClkIn(1),
          Q2 => sample40MHz);
 
-   U_strb40MHz : entity work.SynchronizerOneShot
+   U_strb40MHz : entity surf.SynchronizerOneShot
       generic map (
          TPD_G         => TPD_G,
          BYPASS_SYNC_G => true)
@@ -226,7 +227,7 @@ begin
    -----------------------------------------------------
    -- Reset SPI interface with respect to AXI-Lite reset
    -----------------------------------------------------
-   U_pllSpiRstL : entity work.PwrUpRst
+   U_pllSpiRstL : entity surf.PwrUpRst
       generic map(
          TPD_G          => TPD_G,
          IN_POLARITY_G  => '1',
