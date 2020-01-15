@@ -48,6 +48,7 @@ entity AtlasAltirocAsicReadout is
       probeIbData     : out slv(739 downto 0);
       probeObData     : in  slv(739 downto 0);
       probeBusy       : in  sl;
+      probeSclkPeriod : out slv(15 downto 0);
       -- Streaming ASIC Data Interface (axilClk domain)
       axilClk         : in  sl;
       axilRst         : in  sl;
@@ -102,6 +103,7 @@ architecture rtl of AtlasAltirocAsicReadout is
       probeValid         : sl;
       probeIbData        : slv(740 downto 1);
       probeCache         : slv(740 downto 1);
+      probeSclkPeriod    : slv(15 downto 0);
       cnt                : slv(11 downto 0);
       probeToRstDly      : slv(11 downto 0);
       rstRamPulseWidth   : slv(11 downto 0);
@@ -150,6 +152,7 @@ architecture rtl of AtlasAltirocAsicReadout is
       probeValid         => '0',
       probeIbData        => (others => '0'),
       probeCache         => (others => '0'),
+      probeSclkPeriod    => toSlv(79, 16),
       cnt                => (others => '0'),
       probeToRstDly      => x"000",
       rstRamPulseWidth   => x"00f",
@@ -256,6 +259,8 @@ begin
       axiSlaveRegister (axilEp, x"48", 0, v.probeDigOutDisc);
       axiSlaveRegister (axilEp, x"4C", 0, v.enProbeDig);
       axiSlaveRegister (axilEp, x"50", 0, v.probePa);
+
+      axiSlaveRegister (axilEp, x"60", 0, v.probeSclkPeriod);
 
       axiSlaveRegister (axilEp, x"E0", 0, v.rdIndexLut(0));
       axiSlaveRegister (axilEp, x"E0", 5, v.rdIndexLut(1));
@@ -624,12 +629,13 @@ begin
       end case;
 
       -- Outputs
-      axilWriteSlave <= r.axilWriteSlave;
-      axilReadSlave  <= r.axilReadSlave;
-      readoutBusy    <= r.renable;
-      probeValid     <= r.probeValid;
-      probeIbData    <= r.probeIbData;
-      rstbRam        <= r.rstbRam;
+      axilWriteSlave  <= r.axilWriteSlave;
+      axilReadSlave   <= r.axilReadSlave;
+      readoutBusy     <= r.renable;
+      probeValid      <= r.probeValid;
+      probeIbData     <= r.probeIbData;
+      probeSclkPeriod <= r.probeSclkPeriod;
+      rstbRam         <= r.rstbRam;
 
       if (r.invertRck = '0') then
          rdClk <= r.rdClk;
@@ -656,6 +662,7 @@ begin
          v.probeDigOutDisc    := r.probeDigOutDisc;
          v.enProbeDig         := r.enProbeDig;
          v.probePa            := r.probePa;
+         v.probeSclkPeriod    := r.probeSclkPeriod;
          v.rdIndexLut         := r.rdIndexLut;
          v.readoutSize        := r.readoutSize;
       end if;

@@ -142,6 +142,8 @@ architecture mapping of AtlasAltirocAsic is
    signal probeObData  : slv(739 downto 0);
    signal probeBusy    : sl;
 
+   signal probeSclkPeriod : slv(15 downto 0);
+
    signal calPulse     : sl;
    signal calStrb40MHz : sl;
 
@@ -343,15 +345,16 @@ begin
    U_SlowControlShiftReg : entity work.AtlasAltirocAsicShiftReg
       generic map (
          TPD_G            => TPD_G,
-         SHIFT_REG_SIZE_G => 965,
-         CLK_PERIOD_G     => 6.4E-9,
-         SCLK_PERIOD_G    => ite(SIMULATION_G, SIM_SCLK_PERIOD_C, 1.0E-6))
+         SIMULATION_G     => SIMULATION_G,
+         SHIFT_REG_SIZE_G => 965)
       port map (
          -- ASIC Ports
-         srin            => srinSc,     -- SRIN_SC
-         rstb            => rstbSc,     -- RSTB_SC
-         ck              => ckSc,       -- CK_SC
-         srout           => sroutSc,    -- SROUT_SC
+         srin            => srinSc,         -- SRIN_SC
+         rstb            => rstbSc,         -- RSTB_SC
+         ck              => ckSc,           -- CK_SC
+         srout           => sroutSc,        -- SROUT_SC
+         -- External Interface
+         sclkPeriod      => toSlv(80, 16),  -- ~1 MHz SCLK 
          -- AXI-Lite Interface (axilClk domain)
          axilClk         => axilClk,
          axilRst         => axilRst,
@@ -366,14 +369,12 @@ begin
    U_ProbeShiftReg : entity work.AtlasAltirocAsicShiftReg
       generic map (
          TPD_G            => TPD_G,
-         SHIFT_REG_SIZE_G => 740,
-         CLK_PERIOD_G     => 6.25E-9,
-         -- SCLK_PERIOD_G    => ite(SIMULATION_G, SIM_SCLK_PERIOD_C, 1.0E-6)) -- 1MHz
-         SCLK_PERIOD_G    => ite(SIMULATION_G, SIM_SCLK_PERIOD_C, 1.0E-7))  -- 10MHz
+         SIMULATION_G     => SIMULATION_G,
+         SHIFT_REG_SIZE_G => 740)
       port map (
          -- ASIC Ports
-         srin            => srinProbe,  -- SRIN_PROBE
-         rstb            => rstbProbe,  -- RSTB_PROBE
+         srin            => srinProbe,    -- SRIN_PROBE
+         rstb            => rstbProbe,    -- RSTB_PROBE
          ck              => ckProbeAsic,  -- CK_PROBE_ASIC
          srout           => sroutProbe,   -- SROUT_PROBE
          -- External Interface
@@ -382,6 +383,7 @@ begin
          extIbData       => probeIbData,
          extObData       => probeObData,
          busy            => probeBusy,
+         sclkPeriod      => probeSclkPeriod,
          -- AXI-Lite Interface (axilClk domain)
          axilClk         => clk160MHz,
          axilRst         => rst160MHz,
@@ -436,6 +438,7 @@ begin
          probeIbData     => probeIbData,
          probeObData     => probeObData,
          probeBusy       => probeBusy,
+         probeSclkPeriod => probeSclkPeriod,
          -- Streaming ASIC Data Interface (axilClk domain)
          axilClk         => axilClk,
          axilRst         => axilRst,

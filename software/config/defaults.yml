@@ -154,6 +154,7 @@ Top:
         RckHighWidth: 0x2   # Min. tuned on 18JULY2019:LLR
         RckLowWidth: 0x2    # Min. tuned on 18JULY2019:LLR
         #####################
+        ProbeSclkConfig: 79 # 1MHz Probe SCLK
         RestoreProbeConfig: 0x0
         EnProbeWrite: 0x1
         OnlySendFirstHit: 0x0
