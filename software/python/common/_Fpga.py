@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 ##############################################################################
 ## This file is part of 'ATLAS ALTIROC DEV'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'ATLAS ALTIROC DEV', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'ATLAS ALTIROC DEV', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 
@@ -27,14 +27,14 @@ class MyAxiVersion(axi.AxiVersion):
             description      = 'AXI-Lite Version Module',
             numUserConstants = 0,
             **kwargs):
-            
+
         super().__init__(
-            name        = name, 
-            description = description, 
+            name        = name,
+            description = description,
             **kwargs
         )
-        
-        self.add(pr.RemoteVariable(   
+
+        self.add(pr.RemoteVariable(
             name         = "MacAddress",
             description  = "MacAddress (big-Endian configuration)",
             offset       = 0x400,
@@ -42,16 +42,16 @@ class MyAxiVersion(axi.AxiVersion):
             mode         = "RO",
             hidden       = True,
         ))
-        
+
         self.add(pr.LinkVariable(
-            name         = "MAC_ADDRESS", 
+            name         = "MAC_ADDRESS",
             description  = "MacAddress (human readable)",
-            mode         = 'RO', 
+            mode         = 'RO',
             linkedGet    = udp.getMacValue,
             dependencies = [self.variables["MacAddress"]],
-        ))          
+        ))
 
-        self.add(pr.RemoteVariable(   
+        self.add(pr.RemoteVariable(
             name         = "Efuse",
             offset       = 0x408,
             bitSize      = 32,
@@ -60,98 +60,98 @@ class MyAxiVersion(axi.AxiVersion):
         ))
 
 class Fpga(pr.Device):
-    def __init__(   
-        self,       
+    def __init__(
+        self,
         name        = 'Fpga',
         description = 'Container for FPGA registers',
         configProm  = False,
         advanceUser = False,
             **kwargs):
-        
+
         super().__init__(
             name        = name,
             description = description,
             **kwargs)
 
-        self.add(MyAxiVersion( 
-            name    = 'AxiVersion', 
-            offset  = 0x00000000, 
+        self.add(MyAxiVersion(
+            name    = 'AxiVersion',
+            offset  = 0x00000000,
             expand  = False,
         ))
-        
+
         if(configProm):
             self.add(prom.AxiMicronN25Q(
-                name    = 'AxiMicronN25Q', 
-                offset  = 0x00020000, 
+                name    = 'AxiMicronN25Q',
+                offset  = 0x00020000,
                 hidden  = True, # Hidden in GUI because indented for scripting
             ))
-        
+
         if(advanceUser):
-        
+
             self.add(xil.Xadc(
-                name    = 'Xadc', 
-                offset  = 0x00010000, 
+                name    = 'Xadc',
+                offset  = 0x00010000,
                 expand  = False,
                 hidden  = True, # Hidden in GUI because indented for scripting
             ))
-        
-            self.add(nxp.Sa56004x(      
-                name        = 'BoardTemp', 
-                description = 'This device monitors the board temperature and FPGA junction temperature', 
-                offset      = 0x00040000, 
+
+            self.add(nxp.Sa56004x(
+                name        = 'BoardTemp',
+                description = 'This device monitors the board temperature and FPGA junction temperature',
+                offset      = 0x00040000,
                 expand      = False,
                 hidden      = True, # Hidden in GUI because indented for scripting
             ))
-            
+
             self.add(linear.Ltc4151(
-                name        = 'BoardPwr', 
-                description = 'This device monitors the board power, input voltage and input current', 
-                offset      = 0x00040400, 
+                name        = 'BoardPwr',
+                description = 'This device monitors the board power, input voltage and input current',
+                offset      = 0x00040400,
                 senseRes    = 20.E-3, # Units of Ohms
                 expand      = False,
                 hidden      = True, # Hidden in GUI because indented for scripting
             ))
 
-            self.add(nxp.Sa56004x(      
-                name        = 'DelayIcTemp', 
-                description = 'This device monitors the board temperature and Delay IC\'s temperature', 
-                offset      = 0x00050000, 
+            self.add(nxp.Sa56004x(
+                name        = 'DelayIcTemp',
+                description = 'This device monitors the board temperature and Delay IC\'s temperature',
+                offset      = 0x00050000,
                 expand      = False,
                 hidden      = True, # Hidden in GUI because indented for scripting
-            ))        
-    
-            self.add(silabs.Si5345(      
-                name        = 'Pll', 
-                description = 'This device contains Jitter cleaner PLL', 
-                offset      = 0x00070000, 
+            ))
+
+            self.add(silabs.Si5345(
+                name        = 'Pll',
+                description = 'This device contains Jitter cleaner PLL',
+                offset      = 0x00070000,
                 expand      = False,
-            ))     
+            ))
         else:
-            self.add(silabs.Si5345Lite(      
-                name        = 'Pll', 
-                description = 'This device contains Jitter cleaner PLL', 
-                offset      = 0x00070000, 
+            self.add(silabs.Si5345Lite(
+                name        = 'Pll',
+                description = 'This device contains Jitter cleaner PLL',
+                offset      = 0x00070000,
                 expand      = False,
-            ))     
-            
+            ))
+
         self.add(common.Dac(
-            name        = 'Dac', 
-            description = 'This device contains DAC that sets the VTH', 
-            offset      = 0x00060000, 
+            name        = 'Dac',
+            description = 'This device contains DAC that sets the VTH',
+            offset      = 0x00060000,
             expand      = False,
-        ))  
+        ))
 
         self.add(common.Sem(
-            name        = 'Sem', 
-            description = 'This device contains FEB Soft Error Mitigation Module', 
-            offset      = 0x00080000, 
+            name        = 'Sem',
+            description = 'This device contains FEB Soft Error Mitigation Module',
+            offset      = 0x00080000,
             expand      = False,
-        ))          
+        ))
 
         self.add(common.Altiroc(
-            name        = 'Asic', 
-            description = 'This device contains all the ASIC control/monitoring', 
-            offset      = 0x01000000, 
+            name        = 'Asic',
+            description = 'This device contains all the ASIC control/monitoring',
+            offset      = 0x01000000,
             asyncDev    = [self.Pll.Locked], # Only allow access after the PLL is locked
             expand      = True,
         ))

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 ##############################################################################
 ## This file is part of 'ATLAS ALTIROC DEV'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'ATLAS ALTIROC DEV', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'ATLAS ALTIROC DEV', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 
@@ -24,11 +24,11 @@ else:
 pixel_number = 3 # <= Pixel to be Tested
 
 DataAcqusitionTOA = 1   # <= Enable TOA Data Acquisition (Delay Sweep)
-#DelayRange = 251        # <= Range of Programmable Delay Sweep 
+#DelayRange = 251        # <= Range of Programmable Delay Sweep
 DelayRange_low = 2300     # <= low end of Programmable Delay Sweep
 DelayRange_high = 2700     # <= high end of Programmable Delay Sweep
 DelayRange_step = 1     # <= step size Programmable Delay Sweep
-#DelayRange = 11        # <= Range of Programmable Delay Sweep 
+#DelayRange = 11        # <= Range of Programmable Delay Sweep
 NofIterationsTOA = 16  # <= Number of Iterations for each Delay value
 
 DataAcqusitionTOT = 0   # <= Enable TOT Data Acquisition (Pulser Sweep)
@@ -38,7 +38,7 @@ PulserRangeStep = 1     # <= Step Size of Pulser Sweep Range
 NofIterationsTOT = 100   # <= Number of Iterations for each Pulser Value
 DelayValueTOT = 100       # <= Value of Programmable Delay for TOT Pulser Sweep
 
-nTOA_TOT_Processing = 0 # <= Selects the Data to be Processed and Plotted (0 = TOA, 1 = TOT) 
+nTOA_TOT_Processing = 0 # <= Selects the Data to be Processed and Plotted (0 = TOA, 1 = TOT)
 
 TOT_f_Calibration_En = 0                                       	   # <= Enables Calculation of TOT Fine-Interpolation Calibration Data and Saves them
 #TOT_f_Calibration_LOAD_file = 'TestData/TOT_fine_nocalibration.txt'
@@ -84,8 +84,8 @@ import matplotlib.pyplot as plt
 
 ##############################################################################
 
-def acquire_data(range_low, range_high, range_step, top, 
-        asic_pulser, file_prefix, n_iterations, dataStream): 
+def acquire_data(range_low, range_high, range_step, top,
+        asic_pulser, file_prefix, n_iterations, dataStream):
 
     # # dump the configuration (for debugging purposes)
     # top.SaveConfig('test_Bojan_dump.yml')
@@ -135,11 +135,11 @@ argBool = lambda s: s.lower() in ['true', 't', 'yes', '1']
 
 # Add arguments
 parser.add_argument(
-    "--ip", 
+    "--ip",
     nargs    ='+',
     required = True,
     help     = "List of IP addresses",
-)  
+)
 # Get the arguments
 args = parser.parse_args()
 
@@ -148,12 +148,12 @@ args = parser.parse_args()
 top = feb.Top(
     ip       = args.ip,
     userYaml = [Configuration_LOAD_file],
-    )    
+    )
 
 if DebugPrint:
     top.Fpga[0].AxiVersion.printStatus()
     # Tap the streaming data interface (same interface that writes to file)
-    dataStream = feb.PrintEventReader()    
+    dataStream = feb.PrintEventReader()
     pyrogue.streamTap(top.dataStream[0], dataStream) # Assuming only 1 FPGA
 
 # Data Acquisition for TOA and TOT
@@ -164,7 +164,7 @@ if DataAcqusitionTOA == 1:
 top.Fpga[0].Asic.Gpio.DlyCalPulseSet.set(DelayValueTOT)
 
 if DataAcqusitionTOT == 1:
-    acquire_data(PulserRangeL, PulserRangeH, PulserStep, top, 
+    acquire_data(PulserRangeL, PulserRangeH, PulserStep, top,
             top.Fpga[0].Asic.SlowControl.dac_pulser, 'TOT', NofIterationsTOT, dataStream)
 
 #######################
@@ -186,7 +186,7 @@ if nTOA_TOT_Processing == 0:
         dataStream = feb.MyFileReader()
 
         # Connect the file reader ---> event reader
-        pr.streamConnect(dataReader, dataStream) 
+        pr.streamConnect(dataReader, dataStream)
 
         # Open the file
         dataReader.open('TestData/TOA%d.dat' %delay_value)
@@ -194,11 +194,11 @@ if nTOA_TOT_Processing == 0:
         # Close file once everything processed
         dataReader.closeWait()
 
-    
+
         try:
             print('Processing Data for Delay = %d...' % delay_value)
         except OSError:
-            pass  
+            pass
 
         HitData = dataStream.HitData
 
@@ -214,7 +214,7 @@ if nTOA_TOT_Processing == 0:
         else:
             DataMean.append(0)
             DataStdev.append(0)
-  
+
     if len(DataMean) == 0:
         raise ValueError('No hits were detected during delay sweep. Aborting!')
 
@@ -238,7 +238,7 @@ if nTOA_TOT_Processing == 1 and TOT_f_Calibration_En == 1:
     dataStream = feb.MyFileReader()
 
     # Connect the file reader ---> event reader
-    pr.streamConnect(dataReader, dataStream) 
+    pr.streamConnect(dataReader, dataStream)
 
     for i in range(PulserRangeL, PulserRangeH):
         # Open the file
@@ -247,12 +247,12 @@ if nTOA_TOT_Processing == 1 and TOT_f_Calibration_En == 1:
         # Close file once everything processed
         dataReader.closeWait()
         time.sleep(0.01)
-    
-    if not nVPA_TZ:    
+
+    if not nVPA_TZ:
         HitDataTOTf_cumulative = dataStream.HitDataTOTf_vpa
     else:
         HitDataTOTf_cumulative = dataStream.HitDataTOTf_tz
-    
+
     TOTf_bin_width = np.zeros(16)
     for i in range(16):
         TOTf_bin_width[i]=len(list(np.where(np.asarray(HitDataTOTf_cumulative)==i))[0])
@@ -273,7 +273,7 @@ if nTOA_TOT_Processing == 1 and TOT_f_Calibration_En == 1:
         print(TOTf_bin_width*2*LSB_TOTc)
         print('Average TOT LSB = %f ps' % (LSB_TOTf_mean*2*LSB_TOTc))
     except OSError:
-        pass   
+        pass
 
     np.savetxt(TOT_f_Calibration_SAVE_file,TOTf_bin)
 
@@ -296,7 +296,7 @@ if nTOA_TOT_Processing == 1:
         dataStream = MyFileReader()
 
         # Connect the file reader ---> event reader
-        pr.streamConnect(dataReader, dataStream) 
+        pr.streamConnect(dataReader, dataStream)
 
         # Open the file
         dataReader.open('TestData/TOT%d.dat' %i)
@@ -304,13 +304,13 @@ if nTOA_TOT_Processing == 1:
         # Close file once everything processed
         dataReader.closeWait()
 
-    
+
         try:
             print('Processing Data for Pulser = %d...' % i)
         except OSError:
-            pass  
+            pass
 
-        if not nVPA_TZ:    
+        if not nVPA_TZ:
             HitDataTOTf = dataStream.HitDataTOTf_vpa
             HitDataTOTc = dataStream.HitDataTOTc_vpa
             HitDataTOTc_int1 = dataStream.HitDataTOTc_int1_vpa
@@ -320,10 +320,10 @@ if nTOA_TOT_Processing == 1:
             HitDataTOTc = dataStream.HitDataTOTc_tz
             HitDataTOTc_int1 = dataStream.HitDataTOTc_int1_tz
             HitDataTOTf_cumulative = HitDataTOTf_cumulative + dataStream.HitDataTOTf_tz
-    
+
         Pulser.append(i)
-    
-        TOTf_bin = np.loadtxt(TOT_f_Calibration_LOAD_file) 
+
+        TOTf_bin = np.loadtxt(TOT_f_Calibration_LOAD_file)
         LSB_TOTf_mean = TOTf_bin[16]*2*LSB_TOTc
 
         def calibration_correction(f,c):
@@ -338,15 +338,15 @@ if nTOA_TOT_Processing == 1:
         if IntFVa == 1:
             if len(HitDataTOTf) > 0:
                 HitDataTOT = list((np.asarray(HitDataTOTc_int1)*2 + 1 - np.asarray(list(map(lambda x: TOTf_bin[x], np.asarray(HitDataTOTf, dtype=np.int))))*2)*LSB_TOTc)
-            
+
                 HitDataTOT = list(HitDataTOT + np.asarray(list(map(calibration_correction, HitDataTOTf, list(map(lambda x: x&1, np.asarray(HitDataTOTc))))))*LSB_TOTc)
             else:
-                HitDataTOT = []    
+                HitDataTOT = []
         else:
             if len(HitDataTOTf) > 0:
                 HitDataTOT = list((np.asarray(HitDataTOTc) + 1 - np.asarray(HitDataTOTf)/4)*LSB_TOTc)
             else:
-                HitDataTOT = []  
+                HitDataTOT = []
 
         #HitDataTOT = HitDataTOTc
 
@@ -355,7 +355,7 @@ if nTOA_TOT_Processing == 1:
         exec("%s = %r" % ('HitDataTOTc%d' %i, HitDataTOTc))
 
         ValidTOTCnt.append(len(HitDataTOT))
-        if len(HitDataTOT) > 0:        
+        if len(HitDataTOT) > 0:
             DataMeanTOT.append(np.mean(HitDataTOT, dtype=np.float64))
             DataStdevTOT.append(math.sqrt(math.pow(np.std(HitDataTOT, dtype=np.float64),2) + math.pow(LSB_TOTf_mean,2)/12))
 
@@ -374,7 +374,7 @@ if nTOA_TOT_Processing == 0:
         try:
             print('Delay = %d, HitCnt = %d, DataMean = %f LSB, DataStDev = %f LSB' % (delay_value, HitCnt[delay_index], DataMean[delay_index], DataStdev[delay_index]))
         except OSError:
-            pass   
+            pass
     try:
         print('Maximum Measured TOA = %f LSB' % np.max(DataMean))
         print('Mean Std Dev = %f LSB' % MeanDataStdev)
@@ -489,7 +489,7 @@ else:
             ax3.set_xlabel('TOT Measurement [ps]', fontsize = 10)
             ax3.set_ylabel('N of Measrements', fontsize = 10)
             ax3.legend(['Mean = %f ps \nStd. Dev. = %f ps \nN of Events = %d' % (DataMeanTOT[HistPulserTOT1_index], DataStdevTOT[HistPulserTOT1_index], ValidTOTCnt[HistPulserTOT1_index])], loc = 'upper right', fontsize = 9, markerfirst = False, markerscale = 0, handlelength = 0)
-        else: 
+        else:
             if TOTc_hist == 1:
                 exec("ax3.hist(HitDataTOTc%d, bins = np.arange(129), align = 'left', edgecolor = 'k', color = 'royalblue')" % HistPulserTOT1)
                 ax3.set_xlim(left = -1, right = 128)
@@ -546,4 +546,4 @@ plt.show()
 
 input("Press Enter to continue...")
 top.stop()
-exit()  
+exit()

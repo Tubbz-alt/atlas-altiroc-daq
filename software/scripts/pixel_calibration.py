@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 ##############################################################################
 ## This file is part of 'ATLAS ALTIROC DEV'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'ATLAS ALTIROC DEV', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'ATLAS ALTIROC DEV', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 
@@ -38,7 +38,7 @@ NofIterationsTOA = 16  # <= Number of Iterations for each Delay value
 
 
 DelayStep = 9.5582  # <= Estimate of the Programmable Delay Step in ps (measured on 10JULY2019)
-Disable_CustomConfig = 0 # <= Disables the ASIC Configuration Customization inside the Script (Section Below) => all Configuration Parameters are taken from Configuration File   
+Disable_CustomConfig = 0 # <= Disables the ASIC Configuration Customization inside the Script (Section Below) => all Configuration Parameters are taken from Configuration File
 ##############################################################################
 
 #################################################################
@@ -106,7 +106,7 @@ def set_fpga_for_custom_config(top, pixel_number):
     top.Fpga[0].Asic.SlowControl.IntFVa.set(0x1)
     top.Fpga[0].Asic.SlowControl.SatFTz.set(0x4)
     top.Fpga[0].Asic.SlowControl.IntFTz.set(0x1)
-    
+
     top.Fpga[0].Asic.SlowControl.cBitf.set(0x0) #0
     top.Fpga[0].Asic.SlowControl.cBits.set(0xf) #f
     top.Fpga[0].Asic.SlowControl.cBitc.set(0xf) #f
@@ -179,7 +179,7 @@ def find_optimal_delay_range(top, dataStream, delay_range, optimal_HitData):
         shift = DelayRange_initial_low - delay_range.start
         delay_range = range(DelayRange_initial_low, delay_range.stop+shift, delay_range.step)
     if delay_range.stop > DelayRange_initial_high:
-        shift = delay_range.stop - DelayRange_initial_high 
+        shift = delay_range.stop - DelayRange_initial_high
         delay_range = range(delay_range.start-shift, DelayRange_initial_high, delay_range.step)
 
     print( '\nDelay Range = ' + str(delay_range) )
@@ -224,7 +224,7 @@ def run_pixel_calibration(top, dataStream, pixel_number):
     initial_delay_range = range(DelayRange_initial_low, DelayRange_initial_high, DelayRange_initial_step_size)
     optimal_HitData = []
     optimal_delay_range = find_optimal_delay_range(top, dataStream, initial_delay_range, optimal_HitData)
-    if optimal_delay_range == No_hits_error_value: 
+    if optimal_delay_range == No_hits_error_value:
         return (No_hits_error_value, 'No hits detected...')
 
     #Collect statistics about TOA data values
@@ -234,7 +234,7 @@ def run_pixel_calibration(top, dataStream, pixel_number):
         if len(HitData_list) > 0:
             DataMean[delay_value] = np.mean(HitData_list, dtype=np.float64)
             DataStdev[delay_value] = math.sqrt(math.pow(np.std(HitData_list, dtype=np.float64),2)+1/12)
-  
+
     # The following calculations ignore points with no data (i.e. Std.Dev = 0)
     nonzero = DataMean != 0
 
@@ -261,16 +261,16 @@ argBool = lambda s: s.lower() in ['true', 't', 'yes', '1']
 
 # Add arguments
 parser.add_argument(
-    "--ip", 
+    "--ip",
     nargs    ='+',
     required = True,
     help     = "List of IP addresses",
-)  
+)
 # Get the arguments
 args = parser.parse_args()
 
 # Setup root class
-top = feb.Top(ip= args.ip)    
+top = feb.Top(ip= args.ip)
 
 # Load the default YAML file
 print(f'Loading {Configuration_LOAD_file} Configuration File...')
@@ -278,7 +278,7 @@ top.LoadConfig(arg = Configuration_LOAD_file)
 
 if DebugPrint:
     # Tap the streaming data interface (same interface that writes to file)
-    debugStream = feb.PrintEventReader()    
+    debugStream = feb.PrintEventReader()
     pyrogue.streamTap(top.dataStream[0], debugStream) # Assuming only 1 FPGA
 
 # Create the data reader streaming interface
@@ -286,7 +286,7 @@ dataReader = top.dataStream[0]
 # Create the Event reader streaming interface
 dataStream = feb.MyPixelReader()
 # Connect the file reader ---> event reader
-pr.streamConnect(dataReader, dataStream) 
+pr.streamConnect(dataReader, dataStream)
 
 
 LSB_estimate_array = np.zeros(Number_of_pixels)

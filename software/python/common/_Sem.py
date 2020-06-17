@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 ##############################################################################
 ## This file is part of 'ATLAS ALTIROC DEV'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'ATLAS ALTIROC DEV', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'ATLAS ALTIROC DEV', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 
@@ -18,10 +18,10 @@ class Sem(pr.Device):
             name             = 'Sem',
             description      = 'FEB Soft Error Mitigation Module',
             **kwargs):
-            
+
         super().__init__(
-            name        = name, 
-            description = description, 
+            name        = name,
+            description = description,
             **kwargs
         )
 
@@ -123,15 +123,15 @@ class Sem(pr.Device):
             bitOffset=0,
             base=pr.UInt,
             function=pr.BaseCommand.touchOne))
-            
+
         self.add(pr.RemoteVariable(
-            name         = 'FpgaIndex', 
+            name         = 'FpgaIndex',
             description  = 'FPGA Index',
             offset       = 0xFC,
-            bitSize      = 4, 
-            mode         = 'RW',   
-        ))             
-       
+            bitSize      = 4,
+            mode         = 'RW',
+        ))
+
         @self.command(description='Direct a transition to the IDLE state through the Injection interface')
         def InjectIdleState():
             self.InjectAddrHigh.set(0xE00>>1)
@@ -141,7 +141,7 @@ class Sem(pr.Device):
         def InjectObservationState():
             self.InjectAddrHigh.set(0xA00>>1)
             self.InjectStrobe()
-            
+
         @self.command(description='Inject a SEM error')
         def InjectError():
             self.InjectIdleState()
@@ -155,6 +155,6 @@ class Sem(pr.Device):
             self.InjectAddrHigh.set(0xB00>>1)
             self.InjectStrobe()
 
-            
-            
+
+
 

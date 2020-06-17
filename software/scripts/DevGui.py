@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 ##############################################################################
 ## This file is part of 'ATLAS ALTIROC DEV'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'ATLAS ALTIROC DEV', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'ATLAS ALTIROC DEV', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 
@@ -38,54 +38,54 @@ argBool = lambda s: s.lower() in ['true', 't', 'yes', '1']
 
 # Add arguments
 parser.add_argument(
-    "--ip", 
+    "--ip",
     nargs    ='+',
     required = True,
     help     = "List of IP addresses",
-)  
+)
 
 parser.add_argument(
-    "--pollEn", 
+    "--pollEn",
     type     = argBool,
     required = False,
     default  = True,
     help     = "Enable auto-polling",
-) 
+)
 
 parser.add_argument(
-    "--initRead", 
+    "--initRead",
     type     = argBool,
     required = False,
     default  = True,
     help     = "Enable read all variables at start",
-)  
+)
 
 parser.add_argument(
-    "--loadYaml", 
+    "--loadYaml",
     type     = argBool,
     required = False,
     default  = True,
     help     = "Enable loading of the defaults at start",
-) 
+)
 
 parser.add_argument(
-    "--defaultFile", 
+    "--defaultFile",
     type     = str,
     required = False,
     default  = 'config/defaults.yml',
     help     = "default configuration file to be loaded before user configuration",
-)  
+)
 
 parser.add_argument(
-    "--userYaml", 
+    "--userYaml",
     nargs    ='+',
     required = False,
     default  = [''],
     help     = "List of board specific configurations to be loaded after defaults",
-)  
+)
 
 parser.add_argument(
-    "--refClkSel", 
+    "--refClkSel",
     nargs    ='+',
     required = False,
     default  = ['IntClk'],
@@ -94,20 +94,20 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--printEvents", 
+    "--printEvents",
     type     = argBool,
     required = False,
     default  = False,
     help     = "prints the stream data event frames",
-)  
+)
 
 parser.add_argument(
-    "--liveDisplay", 
+    "--liveDisplay",
     type     = argBool,
     required = False,
     default  = False,
     help     = "Displays live plots of pixel information",
-)  
+)
 
 # Get the arguments
 args = parser.parse_args()
@@ -119,19 +119,19 @@ print(args.ip)
 top = feb.Top(
     ip          = args.ip,
     pollEn      = args.pollEn,
-    initRead    = args.initRead,       
-    loadYaml    = args.loadYaml,       
-    defaultFile = args.defaultFile,       
-    userYaml    = args.userYaml,       
-    refClkSel   = args.refClkSel,       
-)    
+    initRead    = args.initRead,
+    loadYaml    = args.loadYaml,
+    defaultFile = args.defaultFile,
+    userYaml    = args.userYaml,
+    refClkSel   = args.refClkSel,
+)
 
 # Create the Event reader streaming interface
 if (args.printEvents):
     eventReader = feb.PrintEventReader()
 
     # Connect the file reader to the event reader
-    pr.streamTap(top.dataStream[0], eventReader) 
+    pr.streamTap(top.dataStream[0], eventReader)
 
 # Create Live Display
 live_display_resets = []
@@ -140,7 +140,7 @@ if args.liveDisplay:
         # Create the fifo to ensure there is no back-pressure
         fifo = rogue.interfaces.stream.Fifo(100, 0, True)
         # Connect the device reader ---> fifo
-        pr.streamTap(top.dataStream[fpga_index], fifo) 
+        pr.streamTap(top.dataStream[fpga_index], fifo)
         # Create the pixelreader streaming interface
         event_display = feb.onlineEventDisplay(
                 plot_title='FPGA ' + str(fpga_index),
@@ -150,7 +150,7 @@ if args.liveDisplay:
                 overwrite=True  )
         live_display_resets.append( event_display.reset )
         # Connect the fifo ---> stream reader
-        pr.streamConnect(fifo, event_display) 
+        pr.streamConnect(fifo, event_display)
         # Retrieve pixel data streaming object
         display_thread = threading.Thread( target=runLiveDisplay, args=(event_display,fpga_index,) )
         display_thread.start()
@@ -166,11 +166,11 @@ guiTop.resize(600, 800)
 
 print("Starting GUI...\n");
 
-    
+
 # Run GUI
-appTop.exec_()    
+appTop.exec_()
 
 # Close
 Keep_display_alive = False
 top.stop()
-exit()   
+exit()

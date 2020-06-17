@@ -55,17 +55,17 @@ def ParseDataWord(dataWord):
 def ParseFrame(frame):
     # Next we can get the size of the frame payload
     size = frame.getPayload()
-    
+
     # To access the data we need to create a byte array to hold the data
     fullData = bytearray(size)
-    
+
     # Next we read the frame data into the byte array, from offset 0
     frame.read(fullData,0)
 
     # Fill an array of 32-bit formatted word
     wrdData = [None for i in range(5+512*32+1)]
     wrdData = np.frombuffer(fullData, dtype='uint32', count=(size>>2))
-    
+
     # Parse the data and data to data frame
     eventFrame = EventValue()
     eventFrame.FormatVersion     = (wrdData[0] >>  0) & 0xFFF
@@ -95,7 +95,7 @@ class PrintEventReader(rogue.interfaces.stream.Slave):
             self.file   = [None for i in range(2)]
             self.writer = [None for i in range(2)]
             for i in range(2):
-                self.file[i]   = open(f'fpga{i}.csv', 'w', newline='') 
+                self.file[i]   = open(f'fpga{i}.csv', 'w', newline='')
                 self.writer[i] = csv.writer(self.file[i])
                 self.writer[i].writerow([
                     'Timestamp',    # 0 = Timestamp
@@ -110,20 +110,20 @@ class PrintEventReader(rogue.interfaces.stream.Slave):
                     'Hit',          # 9 = Hit
                     'Sof',          # 10 = Sof
                 ])
-                
+
     # Method which is called when a frame is received
     def _acceptFrame(self,frame):
 
         # First it is good practice to hold a lock on the frame data.
         with frame.lock():
             eventFrame = ParseFrame(frame)
-                
+
             # Print out the event
             header_still_needs_to_be_printed = True
             for i in range( len(eventFrame.pixValue) ):
                 pixel = eventFrame.pixValue[i]
                 pixIndex = pixel.PixelIndex
-                
+
                 #if pixel.ToaOverflow != 1: #make sure this pixel is worth printing
                 if (pixel.Hit != 0) and (pixel.ToaData != 0x7F): #make sure this pixel is worth printing
                     if header_still_needs_to_be_printed: #print the header only once per pixel
@@ -131,11 +131,11 @@ class PrintEventReader(rogue.interfaces.stream.Slave):
                               ', payloadSize(Bytes) {:#}'.format( frame.getPayload() ) +
                               ', FormatVersion {:#}'.format(eventFrame.FormatVersion) +
                               ', PixReadIteration {:#}'.format(eventFrame.PixReadIteration) +
-                              ', ReadoutSize {:#}'.format(eventFrame.ReadoutSize) + 
-                              ', DropTrigCnt 0x{:X}'.format(eventFrame.dropTrigCnt) + 
+                              ', ReadoutSize {:#}'.format(eventFrame.ReadoutSize) +
+                              ', DropTrigCnt 0x{:X}'.format(eventFrame.dropTrigCnt) +
                               ', SeqCnt {:#}'.format(eventFrame.SeqCnt) +
                               ', Timestamp {:#}'.format( eventFrame.Timestamp ) )
-                        print('    Pixel : TotOverflow | TotData | ToaOverflow | ToaData | Hit | Sof') 
+                        print('    Pixel : TotOverflow | TotData | ToaOverflow | ToaData | Hit | Sof')
                         header_still_needs_to_be_printed = False
 
                     print('    {:>#5} | {:>#11} | {:>#7} | {:>#11} | {:>#7} | {:>#3} | {:>#3}'.format(
@@ -147,7 +147,7 @@ class PrintEventReader(rogue.interfaces.stream.Slave):
                         pixel.Hit,
                         pixel.Sof)
                     )
-                    
+
                 # Check if dumping to .CVS file
                 if self.cvsDump:
                     self.writer[frame.getChannel()].writerow([
@@ -162,8 +162,8 @@ class PrintEventReader(rogue.interfaces.stream.Slave):
                         pixel.ToaData,      # 8 = ToaData
                         pixel.Hit,          # 9 = Hit
                         pixel.Sof,          # 10 = Sof
-                    ])                
-                        
+                    ])
+
             self.count += 1
 #################################################################
 
@@ -195,7 +195,7 @@ class MyFileReader(rogue.interfaces.stream.Slave):
 
                 if (dat.Hit > 0) and (dat.ToaOverflow == 0):
                     self.HitData.append(dat.ToaData)
-                
+
                 if (dat.Hit > 0) and (dat.TotData != 0x1fc):
                     self.HitDataTOTf_vpa_temp = ((dat.TotData >>  0) & 0x3) + dat.TotOverflow*math.pow(2,2)
                     self.HitDataTOTc_vpa_temp = (dat.TotData >>  2) & 0x7F
@@ -208,7 +208,7 @@ class MyFileReader(rogue.interfaces.stream.Slave):
                     self.HitDataTOTf_tz_temp = ((dat.TotData >>  0) & 0x7) + dat.TotOverflow*math.pow(2,3)
                     self.HitDataTOTc_tz_temp = (dat.TotData >>  3) & 0x3F
                     self.HitDataTOTc_int1_tz_temp = (((dat.TotData >>  3) + 1) >> 1) & 0x1F
-                    self.HitDataTOTf_tz.append(self.HitDataTOTf_tz_temp)                    
+                    self.HitDataTOTf_tz.append(self.HitDataTOTf_tz_temp)
                     self.HitDataTOTc_tz.append(self.HitDataTOTc_tz_temp)
                     self.HitDataTOTc_int1_tz.append(self.HitDataTOTc_int1_tz_temp)
 
@@ -243,7 +243,7 @@ class MyPixelReader(rogue.interfaces.stream.Slave):
 
                 if (dat.Hit > 0) and (dat.ToaOverflow == 0):
                     self.HitData.append(dat.ToaData)
-                
+
                 if (dat.Hit > 0) and (dat.TotData != 0x1fc):
                     self.HitDataTOTf_vpa_temp = ((dat.TotData >>  0) & 0x3) + dat.TotOverflow*math.pow(2,2)
                     self.HitDataTOTc_vpa_temp = (dat.TotData >>  2) & 0x7F
@@ -256,7 +256,7 @@ class MyPixelReader(rogue.interfaces.stream.Slave):
                     self.HitDataTOTf_tz_temp = ((dat.TotData >>  0) & 0x7) + dat.TotOverflow*math.pow(2,3)
                     self.HitDataTOTc_tz_temp = (dat.TotData >>  3) & 0x3F
                     self.HitDataTOTc_int1_tz_temp = (((dat.TotData >>  3) + 1) >> 1) & 0x1F
-                    self.HitDataTOTf_tz.append(self.HitDataTOTf_tz_temp)                    
+                    self.HitDataTOTf_tz.append(self.HitDataTOTf_tz_temp)
                     self.HitDataTOTc_tz.append(self.HitDataTOTc_tz_temp)
                     self.HitDataTOTc_int1_tz.append(self.HitDataTOTc_int1_tz_temp)
 

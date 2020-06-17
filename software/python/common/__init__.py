@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 ##############################################################################
 ## This file is part of 'ATLAS ALTIROC DEV'.
-## It is subject to the license terms in the LICENSE.txt file found in the 
-## top-level directory of this distribution and at: 
-##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
-## No part of 'ATLAS ALTIROC DEV', including this file, 
-## may be copied, modified, propagated, or distributed except according to 
+## It is subject to the license terms in the LICENSE.txt file found in the
+## top-level directory of this distribution and at:
+##    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+## No part of 'ATLAS ALTIROC DEV', including this file,
+## may be copied, modified, propagated, or distributed except according to
 ## the terms contained in the LICENSE.txt file.
 ##############################################################################
 from common._Altiroc            import *
@@ -24,9 +24,9 @@ from common._Sem                import *
 from common._LiveDisplay        import *
 
 def getNsValue(var):
-    return ( var.dependencies[0].value() + 1 )*6.25 
-    
+    return ( var.dependencies[0].value() + 1 )*6.25
+
 def getMhzValue(var):
     value = var.dependencies[0].value() + var.dependencies[1].value() + 2
-    return 1/(value*0.00625)      
-    
+    return 1/(value*0.00625)
+
