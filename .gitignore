@@ -38,3 +38,4 @@ build*
 *.mcs
 *.gz
 *.ltx
+*.xsa
