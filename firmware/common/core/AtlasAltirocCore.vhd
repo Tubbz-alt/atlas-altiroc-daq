@@ -5,11 +5,11 @@
 -- Description: ALTIROC readout core module
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -26,15 +26,16 @@ use unisim.vcomponents.all;
 
 entity AtlasAltirocCore is
    generic (
-      TPD_G        : time             := 1 ns;
-      BUILD_INFO_G : BuildInfoType;
-      SIMULATION_G : boolean          := false;
-      SYNTH_MODE_G : string           := "inferred";
-      COM_TYPE_G   : string           := "ETH";
-      ETH_10G_G    : boolean          := false;
-      DHCP_G       : boolean          := true;
-      IP_ADDR_G    : slv(31 downto 0) := x"0A01A8C0";  -- 192.168.1.10 (before DHCP)      
-      PGP3_RATE_G  : string           := "6.25Gbps");  -- or "10.3125Gbps"      
+      TPD_G          : time             := 1 ns;
+      BUILD_INFO_G   : BuildInfoType;
+      SIMULATION_G   : boolean          := false;
+      SYNTH_MODE_G   : string           := "inferred";
+      COMM_TYPE_G    : string           := "ETH";
+      ASIC_VERSION_G : string           := "V2";
+      ETH_10G_G      : boolean          := false;
+      DHCP_G         : boolean          := true;
+      IP_ADDR_G      : slv(31 downto 0) := x"0A01A8C0";  -- 192.168.1.10 (before DHCP)
+      PGP3_RATE_G    : string           := "6.25Gbps");  -- or "10.3125Gbps"
    port (
       -- ASIC Ports
       renable      : out   sl;          -- RENABLE
@@ -50,7 +51,7 @@ entity AtlasAltirocCore is
       ckProbeAsic  : out   sl;          -- CK_PROBE_ASIC
       rstbDll      : out   sl;          -- RSTB_DLL
       sroutSc      : in    sl;          -- SROUT_SC
-      digProbe     : in    slv(1 downto 0);            -- DIGITAL_PROBE[2:1]
+      digProbe     : in    slv(1 downto 0);              -- DIGITAL_PROBE[2:1]
       sroutProbe   : in    sl;          -- SROUT_PROBE
       totBusy      : in    sl;          -- TOT_BUSY
       toaBusyb     : in    sl;          -- TOA_BUSYB
@@ -59,10 +60,10 @@ entity AtlasAltirocCore is
       calPulseP    : out   sl;          -- PULSE_P
       calPulseN    : out   sl;          -- PULSE_N
       rdClkP       : out   sl;          -- CK_320_P
-      rdClkN       : out   sl;          -- CK_320_M     
-      tdcClkSel    : out   sl;          -- MUX_CLK_SEL 
+      rdClkN       : out   sl;          -- CK_320_M
+      tdcClkSel    : out   sl;          -- MUX_CLK_SEL
       fpgaTdcClkP  : out   sl;          -- FPGA_CK_40_P
-      fpgaTdcClkN  : out   sl;          -- FPGA_CK_40_M           
+      fpgaTdcClkN  : out   sl;          -- FPGA_CK_40_M
       -- CAL Pulse Delay Ports
       dlyCal       : out   Slv12Array(1 downto 0);
       dlyTempScl   : inout sl;
@@ -177,7 +178,7 @@ begin
       port map (
          EFUSEUSR => efuse);
 
-   localMac(23 downto 0)  <= x"56_00_08";  -- 08:00:56:XX:XX:XX (big endian SLV)   
+   localMac(23 downto 0)  <= x"56_00_08";  -- 08:00:56:XX:XX:XX (big endian SLV)
    localMac(47 downto 24) <= efuse(31 downto 8);
 
    ----------------------
@@ -212,8 +213,8 @@ begin
 
    ---------------
    -- PGPv3 Module
-   ---------------         
-   GEN_PGP : if (COM_TYPE_G = "PGPv3") or (SIMULATION_G = true) generate
+   ---------------
+   GEN_PGP : if (COMM_TYPE_G = "PGPv3") or (SIMULATION_G = true) generate
       U_Pgp : entity work.AtlasAltirocPgp3
          generic map (
             TPD_G        => TPD_G,
@@ -252,8 +253,8 @@ begin
 
    ---------------
    -- PGPv3 Module
-   ---------------         
-   GEN_ETH : if (COM_TYPE_G = "ETH") and (SIMULATION_G = false) generate
+   ---------------
+   GEN_ETH : if (COMM_TYPE_G = "ETH") and (SIMULATION_G = false) generate
       U_ETH : entity work.AtlasAltirocEth
          generic map (
             TPD_G        => TPD_G,
@@ -295,7 +296,7 @@ begin
 
    --------------------------
    -- AXI-Lite: Crossbar Core
-   --------------------------  
+   --------------------------
    U_XBAR : entity surf.AxiLiteCrossbar
       generic map (
          TPD_G              => TPD_G,
@@ -314,9 +315,9 @@ begin
          mAxiReadMasters     => axilReadMasters,
          mAxiReadSlaves      => axilReadSlaves);
 
-   -------------------       
+   -------------------
    -- System Registers
-   -------------------       
+   -------------------
    U_System : entity work.AtlasAltirocSys
       generic map (
          TPD_G           => TPD_G,
@@ -372,6 +373,7 @@ begin
       generic map (
          TPD_G           => TPD_G,
          SIMULATION_G    => SIMULATION_G,
+         ASIC_VERSION_G  => ASIC_VERSION_G,
          AXI_BASE_ADDR_G => XBAR_CONFIG_C(ASIC_INDEX_C).baseAddr)
       port map (
          -- Reference Clock/Reset Interface

@@ -5,11 +5,11 @@
 -- Description: ALTIROC readout core module
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -119,10 +119,12 @@ begin
       -- Determine the transaction type
       axiSlaveWaitTxn(axilWriteMaster, axilReadMaster, v.axilWriteSlave, v.axilReadSlave, axilStatus);
 
-      -- Check for a read request            
+      -- Check for a read request
       if (axilStatus.readEnable = '1') then
          if (axilReadMaster.araddr(11 downto 0) = x"FFC") then
             v.axilReadSlave.rdata(0) := r.rstL;
+         elsif (axilReadMaster.araddr(11 downto 0) = x"FF8") then
+            v.axilReadSlave.rdata := toSlv(SHIFT_REG_SIZE_G, 32);
          else
             v.axilReadSlave.rdata := r.data((32*rdIdx)+31 downto (32*rdIdx));
          end if;
@@ -143,9 +145,9 @@ begin
          axiSlaveWriteResponse(v.axilWriteSlave, AXI_RESP_OK_C);
       end if;
 
-      -- State Machine      
+      -- State Machine
       case (r.state) is
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when IDLE_S =>
             -- Check for FW start flag
             if (extValid = '1') then
@@ -164,7 +166,7 @@ begin
                -- Next state
                v.state    := SAMPLE_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when SAMPLE_S =>
             -- Wait half a clock period
             if (r.clkCnt = sclkPeriod) or SIMULATION_G then
@@ -180,7 +182,7 @@ begin
                -- Increment the counter
                v.clkCnt := r.clkCnt + 1;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when SHIFT_S =>
             -- Wait half a clock period
             if (r.clkCnt = sclkPeriod) or SIMULATION_G then
@@ -206,28 +208,28 @@ begin
                -- Increment the counter
                v.clkCnt := r.clkCnt + 1;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when DONE_S =>
             -- Wait half a clock period
             if (r.clkCnt = sclkPeriod) or SIMULATION_G then
                -- Reset the counter
                v.clkCnt := (others => '0');
-               ----------------------------------------------------------------      
-               -- Appears to be a bug in the ASIC with feedback of the shift 
-               -- register output to update the firmware's local v.data cache.  
-               -- Commenting out this part of the code such that only the 
-               -- software can update the firmware's local v.data cache.  
-               ----------------------------------------------------------------      
+               ----------------------------------------------------------------
+               -- Appears to be a bug in the ASIC with feedback of the shift
+               -- register output to update the firmware's local v.data cache.
+               -- Commenting out this part of the code such that only the
+               -- software can update the firmware's local v.data cache.
+               ----------------------------------------------------------------
                -- -- Update the data bus
                -- v.data(SHIFT_REG_SIZE_G-1 downto 0) := r.readback(SHIFT_REG_SIZE_G-1 downto 1) & shiftIn;
-               ----------------------------------------------------------------      
+               ----------------------------------------------------------------
                -- Next state
                v.state  := IDLE_S;
             else
                -- Increment the counter
                v.clkCnt := r.clkCnt + 1;
             end if;
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       end case;
 
       -- Outputs

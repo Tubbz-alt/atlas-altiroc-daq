@@ -5,11 +5,11 @@
 -- Description: System Level Modules
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -139,14 +139,14 @@ architecture mapping of AtlasAltirocSys is
          i2cAddress  => "1001000",      -- 0x90 = SA56004ATK
          dataSize    => 8,              -- in units of bits
          addrSize    => 8,              -- in units of bits
-         endianness  => '0',            -- Little endian                   
-         repeatStart => '0'),           -- No repeat start                   
+         endianness  => '0',            -- Little endian
+         repeatStart => '0'),           -- No repeat start
       1              => MakeI2cAxiLiteDevType(
          i2cAddress  => "1101111",      -- 0xDE = LTC4151CMS#PBF
          dataSize    => 8,              -- in units of bits
          addrSize    => 8,              -- in units of bits
-         endianness  => '0',            -- Little endian   
-         repeatStart => '1'));          -- Repeat Start  
+         endianness  => '0',            -- Little endian
+         repeatStart => '1'));          -- Repeat Start
 
 
    constant DLY_I2C_C : I2cAxiLiteDevArray(0 downto 0) := (others => PWR_I2C_C(0));  -- DLY TEMP IC same as power monitor
@@ -167,7 +167,7 @@ begin
 
    --------------------------
    -- AXI-Lite: Crossbar Core
-   --------------------------  
+   --------------------------
    U_XBAR : entity surf.AxiLiteCrossbar
       generic map (
          TPD_G              => TPD_G,
@@ -188,7 +188,7 @@ begin
 
    ---------------------------
    -- AXI-Lite: Version Module
-   ---------------------------          
+   ---------------------------
    U_AxiVersion : entity surf.AxiVersion
       generic map (
          TPD_G              => TPD_G,
@@ -220,7 +220,7 @@ begin
 
       -----------------------
       -- AXI-Lite XADC Module
-      -----------------------   
+      -----------------------
       U_SEM : entity work.FebSemWrapper
          generic map (
             TPD_G => TPD_G)
@@ -300,7 +300,7 @@ begin
             USRCCLKO  => bootSck,       -- 1-bit input: User CCLK input
             USRCCLKTS => '0',  -- 1-bit input: User CCLK 3-state enable input
             USRDONEO  => '1',  -- 1-bit input: User DONE pin output control
-            USRDONETS => '1');  -- 1-bit input: User DONE 3-state enable output            
+            USRDONETS => '1');  -- 1-bit input: User DONE 3-state enable output
 
       ----------------------
       -- AXI-Lite: Power I2C
@@ -348,7 +348,7 @@ begin
 
       --------------------
       -- AXI-Lite: DAC SPI
-      --------------------            
+      --------------------
       U_DAC : entity surf.AxiSpiMaster
          generic map (
             TPD_G             => TPD_G,

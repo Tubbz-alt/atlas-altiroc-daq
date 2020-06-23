@@ -70,12 +70,13 @@ class Top(pr.Root):
             refClkSel   = ['IntClk'],
             loadYaml    = True,
             userYaml    = [''],
-            defaultFile = 'config/defaults.yml',
+            defaultFile = 'config/AsicVersion2/defaults.yml',
+            asicVersion = 2,
             **kwargs):
         super().__init__(name=name, description=description, **kwargs)
 
         # Set the min. firmware Version support by the software
-        self.minFpgaVersion = 0x30000000
+        self.minFpgaVersion = 0x40000000
 
         # Enable Init after config
         self.InitAfterConfig._default = True
@@ -92,6 +93,7 @@ class Top(pr.Root):
         self.userYaml    = userYaml
         self.defaultFile = defaultFile
         self.pllConfig   = [None for i in range(self.numEthDev)]
+        self.asicVersion = asicVersion
 
         # Check if missing refClkSel configuration
         if (len(refClkSel) < len(ip)):
@@ -164,6 +166,7 @@ class Top(pr.Root):
                 offset      = 0x00000000,
                 configProm  = self.configProm,
                 advanceUser = self.advanceUser,
+                asicVersion = self.asicVersion,
                 expand      = True,
             ))
 
@@ -279,6 +282,21 @@ class Top(pr.Root):
                 # Check for an incompatible V1 FPGA eFUSE value
                 if (self.Fpga[i].AxiVersion.Efuse.get() < 0x00004EA9):
                     errMsg = 'incompatible Version1 FPGA board Detected'
+                    click.secho(errMsg, bg='red')
+                    raise ValueError(errMsg)
+
+                probeBitSizeSw = 992 if (self.asicVersion >= 3) else 965
+                probeBitSizeFw = self.Fpga[i].Asic.SlowControl.SHIFT_REG_SIZE_G.get()
+                if (probeBitSizeFw != probeBitSizeSw):
+                    errMsg = f"""
+                        FPGA Firmware image does not match ASIC version:
+                        Fpga[{i}].Asic.SlowControl.SHIFT_REG_SIZE_G == {probeBitSizeFw} != {probeBitSizeSw}
+
+                        Software ASIC Version argument = {self.asicVersion}
+
+                        Either update FPGA Firmware to {self.asicVersion}
+                        or use different asicVersion software argument
+                        """
                     click.secho(errMsg, bg='red')
                     raise ValueError(errMsg)
 

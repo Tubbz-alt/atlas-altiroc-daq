@@ -5,11 +5,11 @@
 -- Description: IP core Wrapper and message formatter
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -417,7 +417,7 @@ begin
          v.txSsiMaster.data(15 downto 8)  := toSlv(character'pos('P'), 8);
          v.txSsiMaster.data(23 downto 16) := toSlv(character'pos('G'), 8);
          v.txSsiMaster.data(31 downto 24) := toSlv(character'pos('A'), 8);
-         v.txSsiMaster.data(39 downto 32) := toSlv(character'pos('['), 8);         
+         v.txSsiMaster.data(39 downto 32) := toSlv(character'pos('['), 8);
          case r.febAddr is
             when X"0" =>
                v.txSsiMaster.data(47 downto 40) := toSlv(character'pos('0'), 8);
@@ -442,7 +442,7 @@ begin
             when others =>
                v.txSsiMaster.data(47 downto 40) := toSlv(character'pos('?'), 8);
          end case;
-         
+
          v.txSsiMaster.data(55 downto 48) := toSlv(character'pos(']'), 8);
          v.txSsiMaster.data(63 downto 56) := toSlv(character'pos(':'), 8);
          v.txSsiMaster.valid              := '1';

@@ -17,9 +17,9 @@ asicVersion = 2 # <= Select either V1 or V2 of the ASIC
 DebugPrint = True
 
 if (asicVersion == 1):
-    Configuration_LOAD_file = 'config/testBojanV1.yml' # <= Path to the Configuration File to be Loaded
+    Configuration_LOAD_file = 'config/AsicVersion2/testBojanV1.yml' # <= Path to the Configuration File to be Loaded
 else:
-    Configuration_LOAD_file = 'config/testBojanV2.yml' # <= Path to the Configuration File to be Loaded
+    Configuration_LOAD_file = 'config/AsicVersion2/testBojanV2.yml' # <= Path to the Configuration File to be Loaded
 
 pixel_number = 3 # <= Pixel to be Tested
 

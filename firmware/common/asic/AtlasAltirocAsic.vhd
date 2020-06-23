@@ -5,11 +5,11 @@
 -- Description: ALTIROC readout core module
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -30,6 +30,7 @@ entity AtlasAltirocAsic is
    generic (
       TPD_G           : time             := 1 ns;
       SIMULATION_G    : boolean          := false;
+      ASIC_VERSION_G : string           := "V2";
       AXI_BASE_ADDR_G : slv(31 downto 0) := (others => '0'));
    port (
       -- Reference Clock/Reset Interface
@@ -44,9 +45,9 @@ entity AtlasAltirocAsic is
       digProbe        : in  slv(1 downto 0);  -- DIGITAL_PROBE[2:1]
       dlyCal          : out Slv12Array(1 downto 0);
       pllClkSel       : out slv(1 downto 0);
-      tdcClkSel       : out sl;               -- MUX_CLK_SEL 
+      tdcClkSel       : out sl;               -- MUX_CLK_SEL
       fpgaTdcClkP     : out sl;               -- FPGA_CK_40_P
-      fpgaTdcClkN     : out sl;               -- FPGA_CK_40_M         
+      fpgaTdcClkN     : out sl;               -- FPGA_CK_40_M
       -- Trigger Ports
       totBusy         : in  sl;               -- TOT_BUSY
       toaBusyb        : in  sl;               -- TOA_BUSYB
@@ -72,7 +73,7 @@ entity AtlasAltirocAsic is
       doutP           : in  sl;               -- DOUT_P
       doutN           : in  sl;               -- DOUT_N
       rdClkP          : out sl;               -- CK_320_P
-      rdClkN          : out sl;               -- CK_320_M     
+      rdClkN          : out sl;               -- CK_320_M
       -- AXI-Lite Interface (axilClk domain)
       axilClk         : in  sl;
       axilRst         : in  sl;
@@ -164,7 +165,7 @@ begin
 
    --------------------------
    -- AXI-Lite: Crossbar Core
-   --------------------------  
+   --------------------------
    U_XBAR : entity surf.AxiLiteCrossbar
       generic map (
          TPD_G              => TPD_G,
@@ -246,9 +247,9 @@ begin
          mAxiWriteMaster => tdcClkWriteMaster,
          mAxiWriteSlave  => tdcClkWriteSlave);
 
-   -------------------------------------         
+   -------------------------------------
    -- AXI-Lite: Calibration Pulse Module
-   -------------------------------------         
+   -------------------------------------
    U_CalPulse : entity work.AtlasAltirocAsicCalPulse
       generic map (
          TPD_G => TPD_G)
@@ -313,7 +314,7 @@ begin
          clk160MHz       => clk160MHz,
          rst160MHz       => rst160MHz,
          strb40MHz       => strb40MHz,
-         -- AXI-Lite Interface 
+         -- AXI-Lite Interface
          axilReadMaster  => trigReadMaster,
          axilReadSlave   => trigReadSlave,
          axilWriteMaster => trigWriteMaster,
@@ -339,14 +340,14 @@ begin
          mAxiWriteMaster => trigWriteMaster,
          mAxiWriteSlave  => trigWriteSlave);
 
-   ---------------------------------------- 
+   ----------------------------------------
    -- AXI-Lite: Slow Control Shift Register
-   ---------------------------------------- 
+   ----------------------------------------
    U_SlowControlShiftReg : entity work.AtlasAltirocAsicShiftReg
       generic map (
          TPD_G            => TPD_G,
          SIMULATION_G     => SIMULATION_G,
-         SHIFT_REG_SIZE_G => 965)
+         SHIFT_REG_SIZE_G => ite(ASIC_VERSION_G="V2",965,992))
       port map (
          -- ASIC Ports
          srin            => srinSc,         -- SRIN_SC
@@ -354,7 +355,7 @@ begin
          ck              => ckSc,           -- CK_SC
          srout           => sroutSc,        -- SROUT_SC
          -- External Interface
-         sclkPeriod      => toSlv(80, 16),  -- ~1 MHz SCLK 
+         sclkPeriod      => toSlv(80, 16),  -- ~1 MHz SCLK
          -- AXI-Lite Interface (axilClk domain)
          axilClk         => axilClk,
          axilRst         => axilRst,

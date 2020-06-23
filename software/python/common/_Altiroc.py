@@ -20,6 +20,7 @@ class Altiroc(pr.Device):
         name        = 'Altiroc',
         description = 'Container for Altiroc ASIC',
         asyncDev    = None,
+        asicVersion = 2,
             **kwargs):
 
         super().__init__(
@@ -62,6 +63,7 @@ class Altiroc(pr.Device):
             name        = 'SlowControl',
             description = 'This device contains Altiroc ASIC\'s slow control shift register interface',
             offset      = 0x00040000,
+            asicVersion = asicVersion,
             expand      = False,
         ))
 

@@ -89,7 +89,7 @@ $ source /path/to/my/anaconda3/etc/profile.d/conda.sh
 $ source setup_env.sh
 
 # Launch the GUI
-$ python3 scripts/DevGui.py --ip <List of IP addresses>
+$ python3 scripts/DevGui.py --ip <List of IP addresses> --asicVersion <ASIC Version>
  
 ```
 
