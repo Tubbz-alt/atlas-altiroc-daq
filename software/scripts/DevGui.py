@@ -72,7 +72,7 @@ parser.add_argument(
     "--defaultFile",
     type     = str,
     required = False,
-    default  = 'config/defaults.yml',
+    default  = '',
     help     = "default configuration file to be loaded before user configuration",
 )
 
@@ -109,8 +109,24 @@ parser.add_argument(
     help     = "Displays live plots of pixel information",
 )
 
+parser.add_argument(
+    "--asicVersion",
+    type     = int,
+    required = True,
+    help     = "Sets the software ASIC version configuration: Either 2 or 3",
+)
+
 # Get the arguments
 args = parser.parse_args()
+
+#################################################################
+
+# Check for empty default
+if (args.defaultFile == ''):
+    # Auto-generate the path
+    defaultFile = f'config/AsicVersion{args.asicVersion}/defaults.yml'
+else:
+    defaultFile = args.defaultFile
 
 #################################################################
 
@@ -121,9 +137,10 @@ top = feb.Top(
     pollEn      = args.pollEn,
     initRead    = args.initRead,
     loadYaml    = args.loadYaml,
-    defaultFile = args.defaultFile,
+    defaultFile = defaultFile,
     userYaml    = args.userYaml,
     refClkSel   = args.refClkSel,
+    asicVersion = args.asicVersion,
 )
 
 # Create the Event reader streaming interface

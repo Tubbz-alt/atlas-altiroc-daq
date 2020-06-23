@@ -66,6 +66,7 @@ class Fpga(pr.Device):
         description = 'Container for FPGA registers',
         configProm  = False,
         advanceUser = False,
+        asicVersion = 2,
             **kwargs):
 
         super().__init__(
@@ -153,5 +154,6 @@ class Fpga(pr.Device):
             description = 'This device contains all the ASIC control/monitoring',
             offset      = 0x01000000,
             asyncDev    = [self.Pll.Locked], # Only allow access after the PLL is locked
+            asicVersion = asicVersion,
             expand      = True,
         ))

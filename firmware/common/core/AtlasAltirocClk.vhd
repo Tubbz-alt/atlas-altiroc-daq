@@ -5,11 +5,11 @@
 -- Description: PLL Wrapper and external 160 MHz clock MUX
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -79,9 +79,9 @@ architecture mapping of AtlasAltirocClk is
 
 begin
 
-   -------------------------------------------   
+   -------------------------------------------
    -- On-board 40 MHz reference for SI5345 PLL
-   -------------------------------------------      
+   -------------------------------------------
    U_IBUFDS : IBUFDS_GTE2
       port map (
          I     => localRefClkP,
@@ -199,7 +199,7 @@ begin
       -- -- Asynchronous reset
       -- if (reset160MHz = '1') then
          -- r <= REG_INIT_C after TPD_G;
-      -- -- Clock 
+      -- -- Clock
       -- elsif rising_edge(clock160MHz) then
          -- -- Clock Enable
          -- if (strobe40MHz = '1') then

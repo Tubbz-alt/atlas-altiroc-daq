@@ -5,11 +5,11 @@
 -- Description: ALTIROC readout core module
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -27,9 +27,9 @@ entity AtlasAltirocAsicTdcClk is
       TPD_G : time := 1 ns);
    port (
       -- TDC Clock
-      tdcClkSel       : out sl;         -- MUX_CLK_SEL 
+      tdcClkSel       : out sl;         -- MUX_CLK_SEL
       fpgaTdcClkP     : out sl;         -- FPGA_CK_40_P
-      fpgaTdcClkN     : out sl;         -- FPGA_CK_40_M    
+      fpgaTdcClkN     : out sl;         -- FPGA_CK_40_M
       -- AXI-Lite Interface (axilClk domain)
       clk160MHz       : in  sl;
       rst160MHz       : in  sl;

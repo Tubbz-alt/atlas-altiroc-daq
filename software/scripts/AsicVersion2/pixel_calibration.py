@@ -16,7 +16,7 @@ asicVersion = 1 # <= Select either V1 or V2 of the ASIC
 
 DebugPrint = False
 
-Configuration_LOAD_file = 'config/testBojan11.yml' # <= Path to the Configuration File to be Loaded
+Configuration_LOAD_file = 'config/AsicVersion2/testBojan11.yml' # <= Path to the Configuration File to be Loaded
 
 Number_of_pixels = 25
 Pixel_range_low = 0

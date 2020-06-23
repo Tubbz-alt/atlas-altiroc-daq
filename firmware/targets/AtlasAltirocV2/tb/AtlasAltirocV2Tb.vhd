@@ -1,15 +1,15 @@
 -------------------------------------------------------------------------------
--- File       : AtlasAltirocFpga1GbETb.vhd
+-- File       : AtlasAltirocV2Tb.vhd
 -- Company    : SLAC National Accelerator Laboratory
 -------------------------------------------------------------------------------
 -- Description: Simulation Testbed for testing the FPGA module
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS RD53 FMC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS RD53 FMC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS RD53 FMC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -24,9 +24,9 @@ use surf.StdRtlPkg.all;
 library ruckus;
 use ruckus.BuildInfoPkg.all;
 
-entity AtlasAltirocFpga1GbETb is end AtlasAltirocFpga1GbETb;
+entity AtlasAltirocV2Tb is end AtlasAltirocV2Tb;
 
-architecture testbed of AtlasAltirocFpga1GbETb is
+architecture testbed of AtlasAltirocV2Tb is
 
    constant TPD_G : time := 1 ns;
 
@@ -97,7 +97,7 @@ begin
 
       -- Check for the readout enable
       if renable = '1' then
-      
+
          -- Update the output
          v.dout := r.data(r.index);
 
@@ -134,7 +134,7 @@ begin
    seq : process (rdClkP) is
    begin
       -- "The data are available on DataOut(0:20) around 3ns after the falling edge of Rck." page20 of datasheet
-      if falling_edge(rdClkP) then  
+      if falling_edge(rdClkP) then
          r <= rin after 3 ns;
       end if;
    end process seq;
@@ -167,7 +167,7 @@ begin
          clkP => clk40P,
          clkN => clk40N);
 
-   U_Fpga : entity work.AtlasAltirocFpga1GbE
+   U_Fpga : entity work.AtlasAltirocV2
       generic map (
          TPD_G        => TPD_G,
          SIMULATION_G => true,

@@ -5,11 +5,11 @@
 -- Description: ALTIROC Cal Pulse module
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -29,12 +29,12 @@ entity AtlasAltirocAsicCalPulse is
       -- Calibration Pulse Interface
       calPulse        : out sl;
       calPulseP       : out sl;         -- CAL_PULSE_P
-      calPulseN       : out sl;         -- CAL_PULSE_N   
+      calPulseN       : out sl;         -- CAL_PULSE_N
       -- Reference Clock/Reset Interface
       clk160MHz       : in  sl;
       rst160MHz       : in  sl;
       strobe40MHz     : in  sl;
-      -- AXI-Lite Interface 
+      -- AXI-Lite Interface
       axilReadMaster  : in  AxiLiteReadMasterType;
       axilReadSlave   : out AxiLiteReadSlaveType;
       axilWriteMaster : in  AxiLiteWriteMasterType;
@@ -96,7 +96,7 @@ begin
       v.pulse := '0';
       v.start := '0';
 
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       -- Determine the transaction type continuous
       axiSlaveWaitTxn(axilEp, axilWriteMaster, axilReadMaster, v.axilWriteSlave, v.axilReadSlave);
 
@@ -108,7 +108,7 @@ begin
 
       -- Closeout the transaction
       axiSlaveDefault(axilEp, v.axilWriteSlave, v.axilReadSlave, AXI_RESP_DECERR_C);
-      ---------------------------------------------------------------------- 
+      ----------------------------------------------------------------------
 
       -- State Machine
       case r.state is
@@ -157,7 +157,7 @@ begin
                end if;
 
             end if;
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       end case;
 
       -- Check for change in configuration

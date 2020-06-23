@@ -5,7 +5,7 @@ Top:
       ##########################################################################
       Trig:
         CalStrobeAlign: 0x3 # Cal pulse 40 Mhz alignment to 160 MHz
-        EnCalPulseTrig: 0x1 # Enable Cal pulse to trigger readout      
+        EnCalPulseTrig: 0x1 # Enable Cal pulse to trigger readout
         EnableReadout: 0x1
       ##########################################################################
       SlowControl:
@@ -17,7 +17,7 @@ Top:
         ON_discri[:]: 0x0
         EN_hyst[:]: 0x1
         EN_trig_ext[:]: 0x0
-        cBit_f_TOA[:]: 0x0        
+        cBit_f_TOA[:]: 0x0
         cBit_s_TOA[:]: 0x0
         cBit_f_TOT[:]: 0x0
         cBit_s_TOT[:]: 0x0
@@ -35,38 +35,38 @@ Top:
         cBit_f_TOT[3]: 0xf #f
         cBit_s_TOT[3]: 0x0 #0
         cBit_c_TOT[3]: 0xf #f
-        ########################      
+        ########################
         CP_b: 0x5 #5
-        
+
         ext_Vcrtlf_en: 0x0 #0
         ext_Vcrtls_en: 0x1 #1
         ext_Vcrtlc_en: 0x0 #0
 
         totf_satovfw: 0x1
         totc_satovfw: 0x1
-        toa_satovfw: 0x1      
-      
+        toa_satovfw: 0x1
+
         SatFVa: 0x3
         IntFVa: 0x1
         SatFTz: 0x4
-        IntFTz: 0x1      
-      
+        IntFTz: 0x1
+
         cBitf: 0x0 #0
         cBits: 0xf #f
-        cBitc: 0xf #f      
-      
+        cBitc: 0xf #f
+
         Rin_Vpa: 0x1 #0
-      
+
         cd[0]: 0x0 #6
         cd[1]: 0x0
         cd[2]: 0x0
         cd[3]: 0x0
-        cd[4]: 0x0      
-      
+        cd[4]: 0x0
+
         dac_biaspa: 0x10 #10
-      
+
         dac_pulser: 0x7 #7
-        
+
         DAC10bit: 0x173 #173 / 183
 
       ##########################################################################

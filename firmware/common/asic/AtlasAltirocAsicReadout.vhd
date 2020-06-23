@@ -2,14 +2,14 @@
 -- File       : AtlasAltirocAsicReadout.vhd
 -- Company    : SLAC National Accelerator Laboratory
 -------------------------------------------------------------------------------
--- Description: ASIC Deserializer 
+-- Description: ASIC Deserializer
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -31,12 +31,12 @@ entity AtlasAltirocAsicReadout is
    port (
       -- Readout Ports
       renable         : out sl;         -- RENABLE
-      rstbRam         : out sl;         -- RSTB_RAM      
+      rstbRam         : out sl;         -- RSTB_RAM
       rstbRead        : out sl;         -- RSTB_READ
       doutP           : in  sl;         -- DOUT_P
       doutN           : in  sl;         -- DOUT_N
       rdClkP          : out sl;         -- FPGA_CK_40_P
-      rdClkN          : out sl;         -- FPGA_CK_40_M      
+      rdClkN          : out sl;         -- FPGA_CK_40_M
       -- Trigger Interface (clk160MHz domain)
       readoutStart    : in  sl;
       readoutCnt      : in  slv(31 downto 0);
@@ -232,7 +232,7 @@ begin
          v.seqCnt := (others => '0');
       end if;
 
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       -- Determine the transaction type
       axiSlaveWaitTxn(axilEp, axilWriteMaster, axilReadMaster, v.axilWriteSlave, v.axilReadSlave);
 
@@ -299,11 +299,11 @@ begin
 
       -- Closeout the transaction
       axiSlaveDefault(axilEp, v.axilWriteSlave, v.axilReadSlave, AXI_RESP_DECERR_C);
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
 
-      -- State Machine      
+      -- State Machine
       case (r.state) is
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when IDLE_S =>
             -- Cache the current probe value
             v.probeCache := probeObData;
@@ -313,7 +313,7 @@ begin
 
                --------------------------------------------------------------
                --                   Generate the header                    --
-               --------------------------------------------------------------               
+               --------------------------------------------------------------
                -- HDR[0]: Format Version, start and stop
                v.header(0)(11 downto 0) := x"004";  -- Version = 0x4
 
@@ -333,7 +333,7 @@ begin
                -- HDR[4:3]: Time Stamp
                v.header(3)               := timeStamp(31 downto 0);
                v.header(4)               := timeStamp(63 downto 32);
-               --------------------------------------------------------------               
+               --------------------------------------------------------------
 
                -- Set the flag
                v.renable  := '1';
@@ -345,7 +345,7 @@ begin
                -- Next state
                v.state    := HDR_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when HDR_S =>
             -- Check if ready to move data
             if (v.txMaster.tValid = '0') then
@@ -367,35 +367,35 @@ begin
                end if;
             end if;
 
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when PROBE_CONFIG_S =>
             -- Check if need to start the transaction
             if (r.cnt = 0) then
 
-               -- Check if probe module ready 
+               -- Check if probe module ready
                if (probeBusy = '0') then
 
                   -- Configure the probe bus
                   v.probeValid := r.enProbeWrite;
 
-                  -- Reset all the probe values to default 
+                  -- Reset all the probe values to default
                   v.probeIbData(740 downto 1) := (others => '0');
 
                   -- Check the pixel range
                   if (pixIdx < 5) then  -- Check for PIX[4:0] range
-                     -- EN_dout<0:4> = 0x1 
+                     -- EN_dout<0:4> = 0x1
                      v.probeIbData(15 downto 11) := "00001";
 
                   elsif (pixIdx < 10) then  -- Check for PIX[9:5] range
-                     -- EN_dout<0:4> = 0x2 
+                     -- EN_dout<0:4> = 0x2
                      v.probeIbData(15 downto 11) := "00010";
 
                   elsif (pixIdx < 15) then  -- Check for PIX[14:10] range
-                     -- EN_dout<0:4> = 0x4 
+                     -- EN_dout<0:4> = 0x4
                      v.probeIbData(15 downto 11) := "00100";
 
                   elsif (pixIdx < 20) then  -- Check for PIX[19:15] range
-                     -- EN_dout<0:4> = 0x8 
+                     -- EN_dout<0:4> = 0x8
                      v.probeIbData(15 downto 11) := "01000";
 
                   else                  -- Check for PIX[24:20] range
@@ -446,7 +446,7 @@ begin
                -- Increment the counter
                v.cnt := r.cnt + 1;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when PROBE_TO_RST_DLY_S =>
             -- Increment the counter
             v.cnt := r.cnt + 1;
@@ -457,7 +457,7 @@ begin
                -- Next state
                v.state := RST_READ_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when RST_READ_S =>
             -- Set the flag
             v.rstbRead := '0';
@@ -470,7 +470,7 @@ begin
                -- Next state
                v.state := RST_TO_RCK_DLY_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when RST_TO_RCK_DLY_S =>
             -- Set the flag
             v.rstbRead := '1';
@@ -483,7 +483,7 @@ begin
                -- Next state
                v.state := RCK_HIGH_CYCLE_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when RCK_HIGH_CYCLE_S =>
             -- Set the flag
             v.rdClk := '1';
@@ -496,7 +496,7 @@ begin
                -- Next state
                v.state := RCK_LOW_CYCLE_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when RCK_LOW_CYCLE_S =>
             -- Set the flag
             v.rdClk := '0';
@@ -529,7 +529,7 @@ begin
                end if;
 
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when SEND_DATA_S =>
             -- Check if ready to move data
             if (v.txMaster.tValid = '0') then
@@ -600,7 +600,7 @@ begin
                end if;
 
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when RST_RAM_S =>
             -- Increment the counter
             v.cnt := r.cnt + 1;
@@ -615,7 +615,7 @@ begin
                -- Next state
                v.state   := FOOTER_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when FOOTER_S =>
             -- Check if ready to move data
             if (v.txMaster.tValid = '0') then
@@ -625,7 +625,7 @@ begin
                -- Next state
                v.state                       := IDLE_S;
             end if;
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       end case;
 
       -- Outputs

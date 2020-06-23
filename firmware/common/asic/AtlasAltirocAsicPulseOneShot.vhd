@@ -5,11 +5,11 @@
 -- Description: One-Shot Pulser that has to cross clock domains
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ begin
 
       -- State Machine
       case r.state is
-         ----------------------------------------------------------------------   
+         ----------------------------------------------------------------------
          when IDLE_S =>
             -- Check for non-zero pulse width
             if (pulseWidth /= 0) then
@@ -80,7 +80,7 @@ begin
                   v.state := CNT_S;
                end if;
             end if;
-         ----------------------------------------------------------------------   
+         ----------------------------------------------------------------------
          when CNT_S =>
             -- Check the counter
             if r.cnt = (pulseWidth-1) then
@@ -94,10 +94,10 @@ begin
                -- Increment the counter
                v.cnt := r.cnt + 1;
             end if;
-      ----------------------------------------------------------------------   
+      ----------------------------------------------------------------------
       end case;
 
-      -- Outputs 
+      -- Outputs
       pulseOut <= r.pulse;
 
       -- Reset

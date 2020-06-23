@@ -5,11 +5,11 @@
 -- Description: Wrapper for PGPv3 communication
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ entity AtlasAltirocPgp3 is
    generic (
       TPD_G        : time    := 1 ns;
       SIMULATION_G : boolean := false;
-      PGP3_RATE_G  : string  := "6.25Gbps");  -- or "10.3125Gbps"  
+      PGP3_RATE_G  : string  := "6.25Gbps");  -- or "10.3125Gbps"
    port (
       -- AXI-Lite Interface (axilClk domain)
       axilClk         : out sl;
@@ -115,9 +115,9 @@ begin
          BANDWIDTH_G        => "OPTIMIZED",
          CLKIN_PERIOD_G     => 6.4,     -- 156.25 MHz
          DIVCLK_DIVIDE_G    => 1,       -- 156.25 MHz = 156.25 MHz/1
-         CLKFBOUT_MULT_F_G  => 6.0,     -- 937.5 MHz = 156.25 MHz x 6     
+         CLKFBOUT_MULT_F_G  => 6.0,     -- 937.5 MHz = 156.25 MHz x 6
          CLKOUT0_DIVIDE_F_G => 9.375,   -- 100 MHz = 937.5 MHz/9.375
-         CLKOUT1_DIVIDE_G   => 6)       -- 156.25 MHz = 937.5 MHz/6       
+         CLKOUT1_DIVIDE_G   => 6)       -- 156.25 MHz = 937.5 MHz/6
       port map(
          clkIn     => pgpRefClkDiv2,
          rstIn     => pgpRefClkDiv2Rst,
@@ -181,7 +181,7 @@ begin
          GEN_SYNC_FIFO_G     => false,
          AXI_STREAM_CONFIG_G => PGP3_AXIS_CONFIG_C)
       port map (
-         -- Streaming Slave (Rx) Interface (sAxisClk domain) 
+         -- Streaming Slave (Rx) Interface (sAxisClk domain)
          sAxisClk         => pgpClk,
          sAxisRst         => pgpRst,
          sAxisMaster      => pgpRxMasters(0),

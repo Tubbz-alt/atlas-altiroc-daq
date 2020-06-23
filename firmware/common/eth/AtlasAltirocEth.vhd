@@ -5,11 +5,11 @@
 -- Description: Wrapper for Ethernet communication
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -132,7 +132,7 @@ begin
          DIVCLK_DIVIDE_G    => 1,
          CLKFBOUT_MULT_F_G  => ite(ETH_10G_G, 6.0, 7.5),
          CLKOUT0_DIVIDE_F_G => 9.375,   -- 100 MHz = 937.5 MHz/9.375
-         CLKOUT1_DIVIDE_G   => 6)       -- 156.25 MHz = 937.5 MHz/6       
+         CLKOUT1_DIVIDE_G   => 6)       -- 156.25 MHz = 937.5 MHz/6
       port map(
          clkIn     => ethClk,
          rstIn     => ethRst,
@@ -152,13 +152,13 @@ begin
             CLKIN_PERIOD_G     => 3.2,   -- 312.5 MHz
             DIVCLK_DIVIDE_G    => 10,    -- 31.25 MHz = (312.5 MHz/10)
             CLKFBOUT_MULT_F_G  => 32.0,  -- 1 GHz = (32 x 31.25 MHz)
-            CLKOUT0_DIVIDE_F_G => 8.0,   -- 125 MHz = (1.0 GHz/8)         
+            CLKOUT0_DIVIDE_F_G => 8.0,   -- 125 MHz = (1.0 GHz/8)
             -- AXI Streaming Configurations
             AXIS_CONFIG_G      => (others => EMAC_AXIS_CONFIG_C))
          port map (
             -- Local Configurations
             localMac(0)     => localMac,
-            -- Streaming DMA Interface 
+            -- Streaming DMA Interface
             dmaClk(0)       => ethClk,
             dmaRst(0)       => ethRst,
             dmaIbMasters(0) => obMacMaster,
@@ -189,7 +189,7 @@ begin
          port map (
             -- Local Configurations
             localMac(0)     => localMac,
-            -- Streaming DMA Interface 
+            -- Streaming DMA Interface
             dmaClk(0)       => ethClk,
             dmaRst(0)       => ethRst,
             dmaIbMasters(0) => obMacMaster,
@@ -262,8 +262,8 @@ begin
          APP_STREAMS_G       => APP_STREAMS_C,
          APP_STREAM_ROUTES_G => (
             0                => X"00",   -- SRPv3
-            1                => X"01",   -- Data[0]          
-            2                => X"02"),  -- SEM          
+            1                => X"01",   -- Data[0]
+            2                => X"02"),  -- SEM
          APP_AXIS_CONFIG_G   => APP_AXIS_CONFIG_C,
          TSP_AXIS_CONFIG_G   => EMAC_AXIS_CONFIG_C)
       port map (
@@ -289,7 +289,7 @@ begin
          GEN_SYNC_FIFO_G     => false,
          AXI_STREAM_CONFIG_G => PGP3_AXIS_CONFIG_C)
       port map (
-         -- Streaming Slave (Rx) Interface (sAxisClk domain) 
+         -- Streaming Slave (Rx) Interface (sAxisClk domain)
          sAxisClk         => ethClk,
          sAxisRst         => ethRst,
          sAxisMaster      => ethRxMasters(0),

@@ -30,13 +30,13 @@ Top:
         TrigTypeSel: Slave
         CalStrobeAlign: 0x3
         TrigStrobeAlign: 0x3
-        EnCalPulseTrig: 0x0   
-        EnBncExtTrig: 0x0      
-        EnPcieLocalTrig: 0x0      
-        EnLemoRemoteTrig: 0x0      
-        MasterModeSel: OR      
+        EnCalPulseTrig: 0x0
+        EnBncExtTrig: 0x0
+        EnPcieLocalTrig: 0x0
+        EnLemoRemoteTrig: 0x0
+        MasterModeSel: OR
         ReadoutStartDly: 128 # Units of 6.4ns
-        TrigSizeBeforePause: 0x0      
+        TrigSizeBeforePause: 0x0
         DeadtimeDuration: 0x0
         BusyPulseWidth: 255 # Units of 6.4ns
         EnableReadout: 0x0 # Disable triggers
@@ -117,7 +117,7 @@ Top:
         cp: 0x0
         En_40M: 0x1
         En_640M: 0x1
-        rstL: 0x1       
+        rstL: 0x1
       ##########################################################################
       Readout:
         ReadoutSize: 24
@@ -145,7 +145,7 @@ Top:
         RdIndexLut[21]: 21
         RdIndexLut[22]: 22
         RdIndexLut[23]: 23
-        RdIndexLut[24]: 24       
+        RdIndexLut[24]: 24
         #####################
         RstRamPulseWidth: 0xF
         ProbeToRstDly: 0x0  # Min. tuned on 18JULY2019:LLR

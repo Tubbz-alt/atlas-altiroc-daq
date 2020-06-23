@@ -1,15 +1,15 @@
 -------------------------------------------------------------------------------
--- File       : AtlasAltirocFpga1GbE.vhd
+-- File       : AtlasAltirocV2.vhd
 -- Company    : SLAC National Accelerator Laboratory
 -------------------------------------------------------------------------------
 -- Description: Top-Level module using 1 GbE communication
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -19,12 +19,13 @@ use ieee.std_logic_1164.all;
 library surf;
 use surf.StdRtlPkg.all;
 
-entity AtlasAltirocFpga1GbE is
+entity AtlasAltirocV2 is
    generic (
-      TPD_G        : time    := 1 ns;
-      SIMULATION_G : boolean := false;
-      COM_TYPE_G   : string  := "ETH";
-      BUILD_INFO_G : BuildInfoType);
+      TPD_G          : time    := 1 ns;
+      SIMULATION_G   : boolean := false;
+      ASIC_VERSION_G : string  := "V2";
+      COMM_TYPE_G    : string  := "ETH";
+      BUILD_INFO_G   : BuildInfoType);
    port (
       -- ASIC Ports
       renable      : out   sl;               -- RENABLE
@@ -49,10 +50,10 @@ entity AtlasAltirocFpga1GbE is
       calPulseP    : out   sl;               -- PULSE_P
       calPulseN    : out   sl;               -- PULSE_N
       rdClkP       : out   sl;               -- CK_320_P
-      rdClkN       : out   sl;               -- CK_320_M     
-      tdcClkSel    : out   sl;               -- MUX_CLK_SEL 
+      rdClkN       : out   sl;               -- CK_320_M
+      tdcClkSel    : out   sl;               -- MUX_CLK_SEL
       fpgaTdcClkP  : out   sl;               -- FPGA_CK_40_P
-      fpgaTdcClkN  : out   sl;               -- FPGA_CK_40_M 
+      fpgaTdcClkN  : out   sl;               -- FPGA_CK_40_M
       -- CAL Pulse Delay Ports
       dlyCal       : out   Slv12Array(1 downto 0);
       dlyTempScl   : inout sl;
@@ -103,19 +104,20 @@ entity AtlasAltirocFpga1GbE is
       tempAlertL   : in    sl;
       vPIn         : in    sl;
       vNIn         : in    sl);
-end AtlasAltirocFpga1GbE;
+end AtlasAltirocV2;
 
-architecture top_level of AtlasAltirocFpga1GbE is
+architecture top_level of AtlasAltirocV2 is
 
 begin
 
    U_Core : entity work.AtlasAltirocCore
       generic map (
-         TPD_G        => TPD_G,
-         BUILD_INFO_G => BUILD_INFO_G,
-         SIMULATION_G => SIMULATION_G,
-         COM_TYPE_G   => "ETH",
-         IP_ADDR_G    => x"0A01A8C0")  -- 192.168.1.10 (before DHCP)            
+         TPD_G          => TPD_G,
+         BUILD_INFO_G   => BUILD_INFO_G,
+         SIMULATION_G   => SIMULATION_G,
+         COMM_TYPE_G    => COMM_TYPE_G,
+         ASIC_VERSION_G => ASIC_VERSION_G,
+         IP_ADDR_G      => x"0A01A8C0")  -- 192.168.1.10 (before DHCP)
       port map (
          -- ASIC Ports
          renable      => renable,

@@ -2,14 +2,14 @@
 -- File       : AtlasAltirocAsicTrigger.vhd
 -- Company    : SLAC National Accelerator Laboratory
 -------------------------------------------------------------------------------
--- Description: ASIC Trigger 
+-- Description: ASIC Trigger
 -------------------------------------------------------------------------------
 -- This file is part of 'ATLAS ALTIROC DEV'.
--- It is subject to the license terms in the LICENSE.txt file found in the 
--- top-level directory of this distribution and at: 
---    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html. 
--- No part of 'ATLAS ALTIROC DEV', including this file, 
--- may be copied, modified, propagated, or distributed except according to 
+-- It is subject to the license terms in the LICENSE.txt file found in the
+-- top-level directory of this distribution and at:
+--    https://confluence.slac.stanford.edu/display/ppareg/LICENSE.html.
+-- No part of 'ATLAS ALTIROC DEV', including this file,
+-- may be copied, modified, propagated, or distributed except according to
 -- the terms contained in the LICENSE.txt file.
 -------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ entity AtlasAltirocAsicTrigger is
       clk160MHz       : in  sl;
       rst160MHz       : in  sl;
       strb40MHz       : in  sl;
-      -- AXI-Lite Interface 
+      -- AXI-Lite Interface
       axilReadMaster  : in  AxiLiteReadMasterType;
       axilReadSlave   : out AxiLiteReadSlaveType;
       axilWriteMaster : in  AxiLiteWriteMasterType;
@@ -242,8 +242,8 @@ begin
 
    -----------------------------------------
    -- AND Logic for Remote and Local Trigger
-   -----------------------------------------   
-   andTrig <= (localTrig and remoteTrig) and not(r.busy) and not(probeBusy) and trigWindow and not(r.trigMode);  -- r.trigMode='0' = AND mode   
+   -----------------------------------------
+   andTrig <= (localTrig and remoteTrig) and not(r.busy) and not(probeBusy) and trigWindow and not(r.trigMode);  -- r.trigMode='0' = AND mode
 
    ------------------------------------------------------------------
    -- LEMO TTL output connector:
@@ -364,9 +364,9 @@ begin
          v.busy := '0';
       end if;
 
-      ----------------------------------------------------------------------   
+      ----------------------------------------------------------------------
       --                AXI-Lite Register Transactions
-      ----------------------------------------------------------------------   
+      ----------------------------------------------------------------------
 
       -- Determine the transaction type
       axiSlaveWaitTxn(axilEp, axilWriteMaster, axilReadMaster, v.axilWriteSlave, v.axilReadSlave);
@@ -421,9 +421,9 @@ begin
       -- Closeout the transaction
       axiSlaveDefault(axilEp, v.axilWriteSlave, v.axilReadSlave, AXI_RESP_DECERR_C);
 
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       --                      Trigger logic
-      ---------------------------------------------------------------------- 
+      ----------------------------------------------------------------------
 
       -- Check if readout enabled
       if (r.enableReadout = '1') then
@@ -506,11 +506,11 @@ begin
       -- Increment the counter
       v.timeCnt := r.timeCnt + 1;
 
-      ----------------------------------------------------------------------      
-      --                         State Machine      
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
+      --                         State Machine
+      ----------------------------------------------------------------------
       case (r.state) is
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when IDLE_S =>
             v.stateEncode := x"00";
             -- Reset the counters
@@ -525,7 +525,7 @@ begin
                -- Next state
                v.state        := READ_DLY_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when READ_DLY_S =>
             v.stateEncode        := x"01";
             -- Increment the counter
@@ -539,7 +539,7 @@ begin
                -- Next state
                v.state              := READOUT_S;
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when READOUT_S =>
             v.stateEncode := x"02";
             -- Wait for the readout to finish
@@ -576,7 +576,7 @@ begin
                end if;
 
             end if;
-         ----------------------------------------------------------------------      
+         ----------------------------------------------------------------------
          when OSCOPE_DEADTIME_S =>
             v.stateEncode := x"03";
             if (r.timeout = '1') then
@@ -596,7 +596,7 @@ begin
                end if;
 
             end if;
-      ----------------------------------------------------------------------      
+      ----------------------------------------------------------------------
       end case;
 
       -- Check for trigger count reset conditions
