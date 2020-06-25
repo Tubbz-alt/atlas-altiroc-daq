@@ -288,6 +288,7 @@ class Top(pr.Root):
                 probeBitSizeSw = 992 if (self.asicVersion >= 3) else 965
                 probeBitSizeFw = self.Fpga[i].Asic.SlowControl.SHIFT_REG_SIZE_G.get()
                 if (probeBitSizeFw != probeBitSizeSw):
+                    self.Fpga[i].AxiVersion.printStatus()
                     errMsg = f"""
                         FPGA Firmware image does not match ASIC version:
                         Fpga[{i}].Asic.SlowControl.SHIFT_REG_SIZE_G == {probeBitSizeFw} != {probeBitSizeSw}
