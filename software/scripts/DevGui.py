@@ -11,10 +11,14 @@
 
 import sys
 import rogue
-import pyrogue as pr
-import pyrogue.gui
 import argparse
+
+import pyrogue as pr
 import common as feb
+
+import pyrogue.gui
+# import pyrogue.pydm
+
 import time
 import threading
 
@@ -116,6 +120,22 @@ parser.add_argument(
     help     = "Sets the software ASIC version configuration: Either 2 or 3",
 )
 
+parser.add_argument(
+    "--serverPort",
+    type     = int,
+    required = False,
+    default  = 9099,
+    help     = "Zeromq server port: 9099 is the default, 0 for auto",
+)
+
+parser.add_argument(
+    "--guiType",
+    type     = str,
+    required = False,
+    default  = 'PyQt',
+    help     = "Sets the GUI type (PyDM or PyQt)",
+)
+
 # Get the arguments
 args = parser.parse_args()
 
@@ -141,6 +161,7 @@ top = feb.Top(
     userYaml    = args.userYaml,
     refClkSel   = args.refClkSel,
     asicVersion = args.asicVersion,
+    # serverPort  = args.serverPort,
 )
 
 # Create the Event reader streaming interface
@@ -173,19 +194,33 @@ if args.liveDisplay:
         display_thread.start()
 top.add_live_display_resets(live_display_resets)
 
+#################
+# Legacy PyQT GUI
+#################
+if (args.guiType == 'PyQt'):
 
-# Create GUI
-appTop = pr.gui.application(sys.argv)
-guiTop = pr.gui.GuiTop()
-appTop.setStyle('Fusion')
-guiTop.addTree(top)
-guiTop.resize(600, 800)
+    # Create GUI
+    appTop = pr.gui.application(sys.argv)
+    guiTop = pr.gui.GuiTop()
+    appTop.setStyle('Fusion')
+    guiTop.addTree(top)
+    guiTop.resize(600, 800)
 
-print("Starting GUI...\n");
+    # Run gui
+    appTop.exec_()
 
+######################
+# Development PyDM GUI
+######################
+#elif (args.guiType == 'PyDM'):
 
-# Run GUI
-appTop.exec_()
+#    pyrogue.pydm.runPyDM(root=top)
+
+####################
+# Undefined GUI type
+####################
+else:
+    raise ValueError("Invalid GUI type (%s)" % (args.guiType) )
 
 # Close
 Keep_display_alive = False
