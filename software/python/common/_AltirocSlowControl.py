@@ -591,7 +591,7 @@ class AltirocSlowControl(pr.Device):
         else:
 
             cdBitOffset = [189,357,525,693,861]
-            cdDefine    = 'In units of 1pF',
+            cdDefine    = 'In units of 1.0pF',
 
         ############################################
 
@@ -599,7 +599,7 @@ class AltirocSlowControl(pr.Device):
 
             addReg(
                 name        = f'cd[{i}]',
-                description = "",
+                description = '',
                 bitSize     = 3,
                 bitOffset   = cdBitOffset[i],
                 value       = 0x0, # DEF Value
