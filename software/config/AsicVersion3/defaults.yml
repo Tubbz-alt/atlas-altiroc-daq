@@ -84,7 +84,7 @@ Top:
         coarse_Lcomp_b: 0x0
         coarse_Up_Downb: 0x0
         EN_8drivers: 0x0
-        ON PLL: 0x0
+        ON_PLL: 0x0
         PLL_icpb: 0x0
         EN_RPG: 0x0
         dac_CP_BWb: 0x10
