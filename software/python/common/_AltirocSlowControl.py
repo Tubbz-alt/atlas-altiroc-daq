@@ -224,6 +224,15 @@ class AltirocSlowControl(pr.Device):
                 base        = downToBitOrdering,
             )
 
+            addReg(
+                name        = 'totf_satovfw',
+                description = 'TOT fine',
+                bitSize     = 1,
+                bitOffset   = 56,
+                value       = 0x0, # DEF Value
+                base        = downToBitOrdering,
+            )
+
         else:
 
             addReg(
@@ -253,18 +262,32 @@ class AltirocSlowControl(pr.Device):
                 base        = downToBitOrdering,
             )
 
-        ############################################
+            addReg(
+                name        = 'totf_satovfw',
+                description = 'TOT fine',
+                bitSize     = 1,
+                bitOffset   = 54,
+                value       = 0x0, # DEF Value
+                base        = downToBitOrdering,
+            )
 
-        addReg(
-            name        = 'totf_satovfw',
-            description = 'TOT fine',
-            bitSize     = 1,
-            bitOffset   = 56,
-            value       = 0x0, # DEF Value
-            base        = downToBitOrdering,
-        )
+            addReg(
+                name        = 'totc_satovfw',
+                description = 'TOT coarse',
+                bitSize     = 1,
+                bitOffset   = 55,
+                value       = 0x0, # DEF Value
+                base        = downToBitOrdering,
+            )
 
-        ############################################
+            addReg(
+                name        = 'toac_satovfw',
+                description = 'TOA overflow',
+                bitSize     = 1,
+                bitOffset   = 56,
+                value       = 0x0, # DEF Value
+                base        = downToBitOrdering,
+            )
 
         ################################################
         # Note: These are V2 (or earlier) only registers
