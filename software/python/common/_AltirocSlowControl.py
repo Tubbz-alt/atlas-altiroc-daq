@@ -422,7 +422,7 @@ class AltirocSlowControl(pr.Device):
         for i in range(25):
 
             addReg(
-                name        = ('EN_ck_SRAM[%d]' % i),
+                name        = f'EN_ck_SRAM[{i}]',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = (0+pixChBitOffset[i]),
@@ -431,7 +431,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('ON_Ctest[%d]' % i),
+                name        = f'ON_Ctest[{i}]',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = (1+pixChBitOffset[i]),
@@ -440,7 +440,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('disable_pa[%d]' % i),
+                name        = f'disable_pa[{i}]',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = (2+pixChBitOffset[i]),
@@ -449,7 +449,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('bit_vth_cor[%d]' % i),
+                name        = f'bit_vth_cor[{i}]',
                 description = 'Undefined',
                 bitSize     = 7,
                 bitOffset   = (3+pixChBitOffset[i]),
@@ -458,7 +458,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('ON_discri[%d]' % i),
+                name        = f'ON_discri[{i}]',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = (10+pixChBitOffset[i]),
@@ -467,7 +467,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('EN_hyst[%d]' % i),
+                name        = f'EN_hyst[{i}]',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = (11+pixChBitOffset[i]),
@@ -476,7 +476,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('EN_trig_ext[%d]' % i),
+                name        = f'EN_trig_ext[{i}]',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = (12+pixChBitOffset[i]),
@@ -489,7 +489,7 @@ class AltirocSlowControl(pr.Device):
             if( asicVersion <= 2 ):
 
                 addReg(
-                    name        = ('cBit_f_TOT[%d]' % i),
+                    name        = f'cBit_f_TOT[{i}]',
                     description = 'Undefined',
                     bitSize     = 4,
                     bitOffset   = (13+pixChBitOffset[i]),
@@ -500,7 +500,7 @@ class AltirocSlowControl(pr.Device):
             else:
 
                 addReg(
-                    name        = ('en_rstb_toa[%d]' % i),
+                    name        = f'en_rstb_toa[{i}]',
                     description = 'TOA TDC under reset when en_rstb=1',
                     bitSize     = 1,
                     bitOffset   = (13+pixChBitOffset[i]),
@@ -509,7 +509,7 @@ class AltirocSlowControl(pr.Device):
                 )
 
                 addReg(
-                    name        = ('cBit_f_TOT[%d]' % i),
+                    name        = f'cBit_f_TOT[{i}]',
                     description = 'Undefined',
                     bitSize     = 3,
                     bitOffset   = (14+pixChBitOffset[i]),
@@ -520,7 +520,7 @@ class AltirocSlowControl(pr.Device):
             ############################################
 
             addReg(
-                name        = ('cBit_c_TOT[%d]' % i),
+                name        = f'cBit_c_TOT[{i}]',
                 description = 'Undefined',
                 bitSize     = 4,
                 bitOffset   = (17+pixChBitOffset[i]),
@@ -533,7 +533,7 @@ class AltirocSlowControl(pr.Device):
             if( asicVersion <= 2 ):
 
                 addReg(
-                    name        = ('cBit_s_TOT[%d]' % i),
+                    name        = f'cBit_s_TOT[{i}]',
                     description = 'Undefined',
                     bitSize     = 4,
                     bitOffset   = (21+pixChBitOffset[i]),
@@ -544,7 +544,7 @@ class AltirocSlowControl(pr.Device):
             else:
 
                 addReg(
-                    name        = ('en_rstb_tot[%d]' % i),
+                    name        = f'en_rstb_tot[{i}]',
                     description = 'TOT TDC under reset when en_rstb=1',
                     bitSize     = 1,
                     bitOffset   = (21+pixChBitOffset[i]),
@@ -553,7 +553,7 @@ class AltirocSlowControl(pr.Device):
                 )
 
                 addReg(
-                    name        = ('cBit_s_TOT[%d]' % i),
+                    name        = f'cBit_s_TOT[{i}]',
                     description = 'Undefined',
                     bitSize     = 3,
                     bitOffset   = (22+pixChBitOffset[i]),
@@ -564,7 +564,7 @@ class AltirocSlowControl(pr.Device):
             ############################################
 
             addReg(
-                name        = ('cBit_s_TOA[%d]' % i),
+                name        = f'cBit_s_TOA[{i}]',
                 description = 'Undefined',
                 bitSize     = 4,
                 bitOffset   = (25+pixChBitOffset[i]),
@@ -573,7 +573,7 @@ class AltirocSlowControl(pr.Device):
             )
 
             addReg(
-                name        = ('cBit_f_TOA[%d]' % i),
+                name        = f'cBit_f_TOA[{i}]',
                 description = 'Undefined',
                 bitSize     = 4,
                 bitOffset   = (29+pixChBitOffset[i]),
@@ -598,8 +598,8 @@ class AltirocSlowControl(pr.Device):
         for i in range(5):
 
             addReg(
-                name        = ('cd[%d]' % i),
-                description = cdDefine,
+                name        = f'cd[{i}]',
+                description = "",
                 bitSize     = 3,
                 bitOffset   = cdBitOffset[i],
                 value       = 0x0, # DEF Value
