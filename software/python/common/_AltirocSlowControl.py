@@ -992,7 +992,7 @@ class AltirocSlowControl(pr.Device):
             ########################################
 
             addReg(
-                name        = 'ON PLL',
+                name        = 'ON_PLL',
                 description = 'Undefined',
                 bitSize     = 1,
                 bitOffset   = 942,
