@@ -45,7 +45,7 @@ Top:
       ##########################################################################
       SlowControl:
         dac: 0x0
-        ON_dac_LR: 0x1
+        ON_dac_LR: 0x0
         Write_opt: 0x0
         Precharge_opt: 0x0
         ref_bg: 0x1
@@ -68,12 +68,12 @@ Top:
         cd[3]: 0x0
         cd[4]: 0x0
         choice_shifted_ck40: 0x0
-        choice_fpga_ck40: 0x0
+        choice_fpga_ck40: 0x1
         cBitf: 0x0
         DLLfast_EXTvctrl_en: 0x0
         fast_Lcomp_b: 0x0
         fast_Up_Downb: 0x0
-        DLL_CP_b: 0x0
+        DLL_CP_b: 0x10
         DLL_ALockR_en: 0x1
         Cbits: 0x0
         DLLslow_EXTvctrl_en: 0x0
@@ -85,7 +85,7 @@ Top:
         coarse_Up_Downb: 0x0
         EN_8drivers: 0x0
         ON_PLL: 0x0
-        PLL_icpb: 0x0
+        PLL_icpb: 0x0A
         EN_RPG: 0x0
         dac_CP_BWb: 0x10
         EN_ExtVin_vco_PLL: 0x0
@@ -105,9 +105,9 @@ Top:
         initb: 0x1
         initc: 0x1
         cpen: 0x1
-        PS_cp: 0x0
-        En_40M: 0x1
-        En_640M: 0x1
+        PS_cp: 0x8
+        En_40M: 0x0
+        En_640M: 0x0
         FineDelayLum: 0x0
         detectEn: 0x0
         #####################
