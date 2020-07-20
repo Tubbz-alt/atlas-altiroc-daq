@@ -17,7 +17,7 @@ import pyrogue as pr
 import common as feb
 
 import pyrogue.gui
-# import pyrogue.pydm
+import pyrogue.pydm
 
 import time
 import threading
@@ -132,7 +132,7 @@ parser.add_argument(
     "--guiType",
     type     = str,
     required = False,
-    default  = 'PyQt',
+    default  = 'PyDM',
     help     = "Sets the GUI type (PyDM or PyQt)",
 )
 
@@ -161,7 +161,7 @@ top = feb.Top(
     userYaml    = args.userYaml,
     refClkSel   = args.refClkSel,
     asicVersion = args.asicVersion,
-    # serverPort  = args.serverPort,
+    serverPort  = args.serverPort,
 )
 
 # Create the Event reader streaming interface
@@ -212,9 +212,9 @@ if (args.guiType == 'PyQt'):
 ######################
 # Development PyDM GUI
 ######################
-#elif (args.guiType == 'PyDM'):
+elif (args.guiType == 'PyDM'):
 
-#    pyrogue.pydm.runPyDM(root=top)
+   pyrogue.pydm.runPyDM(root=top)
 
 ####################
 # Undefined GUI type

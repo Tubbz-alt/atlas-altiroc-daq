@@ -26,10 +26,10 @@ import click
 import os
 import threading
 
-# Force the rogue version to be v3.7.0
-if rogue.Version.current() != 'v3.7.0':
+# Force the rogue version to be v5.1.0
+if rogue.Version.current() != 'v5.1.0':
     # print(f'rogue.Version.current() = {rogue.Version.current()}')
-    errMsg = 'rogue version must be v3.7.0'
+    errMsg = 'rogue version must be v5.1.0'
     click.secho(errMsg, bg='red')
     raise ValueError(errMsg)
 
@@ -242,11 +242,7 @@ class Top(pr.Root):
         ######################################################################
 
         # Start the system
-        self.start(
-            pollEn   = self._pollEn,
-            initRead = self._initRead,
-            timeout  = self._timeout,
-        )
+        self.start()
 
     def add_live_display_resets(self, reset_list):
         self.reset_list = reset_list

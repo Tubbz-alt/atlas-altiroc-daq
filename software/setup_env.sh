@@ -9,7 +9,8 @@
 ##############################################################################
 
 ## Activate Rogue conda Environment
-conda activate rogue_3.7.0
+conda activate rogue_5.1.0
+#conda activate rogue_3.7.0
 
 # Python Package directories
 export SURF_DIR=${PWD}/../firmware/submodules/surf/python
