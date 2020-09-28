@@ -26,12 +26,12 @@ import click
 import os
 import threading
 
-# Force the rogue version to be v5.1.0
-if rogue.Version.current() != 'v5.1.0':
-    # print(f'rogue.Version.current() = {rogue.Version.current()}')
-    errMsg = 'rogue version must be v5.1.0'
-    click.secho(errMsg, bg='red')
-    raise ValueError(errMsg)
+# # Force the rogue version to be v5.1.0
+# if rogue.Version.current() != 'v5.1.0':
+    # # print(f'rogue.Version.current() = {rogue.Version.current()}')
+    # errMsg = 'rogue version must be v5.1.0'
+    # click.secho(errMsg, bg='red')
+    # raise ValueError(errMsg)
 
 class SemAsciiFileWriter(rogue.interfaces.stream.Slave):
     def __init__(self):
